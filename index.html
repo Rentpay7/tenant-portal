@@ -559,10 +559,10 @@
 
 <!-- ============================================================
      WHATSAPP FAB
-     TODO: Replace +254795665527 with your actual WhatsApp number
+     TODO: Replace +254700000000 with your actual WhatsApp number
 ============================================================ -->
 <a class="wa-fab"
-   href="https://wa.me/254795665527?text=Hello%2C%20I%20have%20a%20query%20about%20my%20rent."
+   href="https://wa.me/254700000000?text=Hello%2C%20I%20have%20a%20query%20about%20my%20rent."
    target="_blank"
    rel="noopener"
    title="Chat with Caretaker on WhatsApp">
@@ -705,7 +705,7 @@
 
   <footer class="footer">
     Having trouble? &nbsp;
-    <a href="https://wa.me/+254795665527" target="_blank" rel="noopener">
+    <a href="https://wa.me/254700000000" target="_blank" rel="noopener">
       Contact the Caretaker directly on WhatsApp
     </a>
     <br/><br/>
@@ -721,6 +721,7 @@
    TODO: Add / edit your actual tenants and houses here.
    Fields: houseNumber, tenantName, rentAmount (string), dueNote
 ================================================================ */
+
 const TENANTS = [
 
   { houseNumber: "1A", tenantName: "KK", rentAmount: 30000 },
@@ -854,6 +855,7 @@ const EMAILJS_SERVICE_ID = "service_e6aqg2m";
 const EMAILJS_TEMPLATE_ID = "template_hbe58mp";
 const EMAILJS_AUTOREPLY_TEMPLATE_ID = "template_fnv2ih7";
 /* Init EmailJS */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCVPotAbCviJPVySCikQzWRYaKVYSrXouwtM99XYzLm6wTstHmMHlngy-tXjGXsxxC/exec";
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
 /* ================================================================
@@ -1015,29 +1017,41 @@ document.getElementById('paymentForm').addEventListener('submit', async function
   };
 
  
+try {
 
-  try {
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
-    showStatus('success',
-      'Payment proof sent successfully! The caretaker has been notified by email. ' +
-      'You will receive a confirmation at ' + email + '.'
-    );
-    /* Reset form fields but keep tenant selected */
-    document.getElementById('f-bankMsg').value = '';
-    document.getElementById('f-notes').value   = '';
-    document.getElementById('f-email').value   = '';
-   
-  } catch (err) {
-    console.error('EmailJS error:', err);
-    showStatus('error',
-      'Failed to send. Please check your internet connection or contact the caretaker ' +
-      'directly on WhatsApp. Error: ' + (err.text || err.message || 'Unknown error')
-    );
-  } finally {
-    btn.classList.remove('loading');
-    btn.disabled = false;
+  const response = await fetch(SCRIPT_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(params)
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to save payment.");
   }
-});
-</script>
+
+  showStatus(
+    'success',
+    'Payment proof submitted successfully! The caretaker has been notified and a confirmation email has been sent.'
+  );
+
+  document.getElementById('f-bankMsg').value = '';
+  document.getElementById('f-notes').value = '';
+  document.getElementById('f-email').value = '';
+
+} catch (err) {
+  console.error(err);
+
+  showStatus(
+    'error',
+    'Submission failed. ' + (err.message || 'Unknown error')
+  );
+}
+
+  /* Reset button state */
+  btn.classList.remove('loading');
+  btn.disabled = false;
+});</script>
 </body>
 </html>
