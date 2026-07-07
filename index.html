@@ -855,7 +855,7 @@ const EMAILJS_SERVICE_ID = "service_e6aqg2m";
 const EMAILJS_TEMPLATE_ID = "template_hbe58mp";
 const EMAILJS_AUTOREPLY_TEMPLATE_ID = "template_fnv2ih7";
 /* Init EmailJS */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxtV6lWWMY336lh60F-9SpmrDABnw8vIjH7U8NUXRr0cOLRRDS2qD8AQKDaNyBBF7qX/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-Cyohww-9_JoEir5KT5cHEGj4CkFvwZtuAqEGSyS9TqoEdXE50ZDGYMSB9Fi1yuMI/exec";
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
 /* ================================================================
@@ -1024,7 +1024,9 @@ try {
 Object.keys(params).forEach(key=>{
     formData.append(key, params[key]);
 });
-
+console.log("Starting submission...");
+console.log(params);
+console.log("Fetch finished");
 const response = await fetch(SCRIPT_URL,{
     method:"POST",
     body:formData
