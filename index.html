@@ -21,6 +21,7 @@
     --accent-2:   #25c97f;
     --accent-glow:rgba(37,201,127,0.18);
     --warn:       #e8683a;
+    --warn-glow:  rgba(232,104,58,0.12);
     --wa:         #25d366;
     --border:     #d8e4de;
     --shadow-sm:  0 2px 8px rgba(13,31,26,0.07);
@@ -369,7 +370,104 @@
   }
   .field textarea { min-height: 110px; }
 
- 
+  /* ============================================================
+     IMAGE UPLOAD (NEW)
+  ============================================================ */
+  .upload-zone {
+    position: relative;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    padding: 22px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .upload-zone:hover,
+  .upload-zone.dragover {
+    border-color: var(--accent-2);
+    background: var(--accent-glow);
+  }
+  .upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .upload-icon {
+    width: 38px; height: 38px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .upload-icon svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 2; }
+  .upload-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .upload-subtext {
+    font-size: 0.78rem;
+    color: var(--ink-light);
+  }
+  .upload-preview {
+    display: none;
+    position: relative;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 2px solid var(--border);
+    background: var(--surface);
+  }
+  .upload-preview.show { display: block; }
+  .upload-preview img {
+    display: block;
+    width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+    background: #eef3f0;
+  }
+  .upload-preview-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+  }
+  .upload-filename {
+    font-size: 0.8rem;
+    color: var(--ink-light);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 70%;
+  }
+  .upload-remove {
+    background: var(--warn-glow);
+    color: var(--warn);
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .upload-remove:hover { background: rgba(232,104,58,0.22); }
+  .upload-processing {
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 8px;
+    display: none;
+  }
+  .upload-processing.show { display: block; }
+
   /* SUBMIT BTN */
   .submit-btn {
     width: 100%;
@@ -402,6 +500,10 @@
   .submit-btn:hover:not(:disabled)::after { background: rgba(255,255,255,0.07); }
   .submit-btn:active:not(:disabled) { transform: translateY(0); }
   .submit-btn:disabled { opacity: 0.65; cursor: not-allowed; }
+  .submit-btn.submitted {
+    background: linear-gradient(135deg, #6b7d75 0%, #556358 100%);
+    box-shadow: none;
+  }
   .btn-loader {
     display: none;
     width: 18px; height: 18px;
@@ -413,6 +515,34 @@
   }
   .submit-btn.loading .btn-text { display: none; }
   .submit-btn.loading .btn-loader { display: block; }
+
+  /* ============================================================
+     SUBMIT-ONCE WARNING (NEW)
+  ============================================================ */
+  .submit-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--warn-glow);
+    border: 1px solid rgba(232,104,58,0.30);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 18px;
+  }
+  .submit-warning svg {
+    width: 18px; height: 18px;
+    stroke: var(--warn);
+    fill: none;
+    stroke-width: 2;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .submit-warning p {
+    font-size: 0.82rem;
+    color: #9a4423;
+    line-height: 1.5;
+  }
+  .submit-warning strong { color: var(--warn); }
 
   /* ============================================================
      STATUS MESSAGES
@@ -510,6 +640,144 @@
   }
 
   /* ============================================================
+     PAYBILL FLOATING WIDGET (NEW)
+  ============================================================ */
+  .pay-fab {
+    position: fixed;
+    bottom: 28px;
+    left: 24px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 6px 24px rgba(26,122,82,0.40);
+    padding: 14px;
+    cursor: pointer;
+    transition: padding 0.25s ease, box-shadow 0.25s;
+    animation: popIn 0.5s 0.9s ease both;
+  }
+  .pay-fab:hover {
+    padding: 14px 20px;
+    box-shadow: 0 10px 32px rgba(26,122,82,0.5);
+  }
+  .pay-fab svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2; flex-shrink: 0; }
+  .pay-fab-label {
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: max-width 0.3s ease, margin-left 0.3s;
+    margin-left: 0;
+  }
+  .pay-fab:hover .pay-fab-label {
+    max-width: 140px;
+    margin-left: 10px;
+  }
+
+  .pay-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,31,26,0.45);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fadeDown 0.2s ease both;
+  }
+  .pay-overlay.open { display: flex; }
+  .pay-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--card);
+    border-radius: 22px 22px 0 0;
+    padding: 28px 24px 32px;
+    box-shadow: 0 -8px 40px rgba(13,31,26,0.25);
+    animation: slideUp 0.3s ease both;
+  }
+  @media (min-width: 480px) {
+    .pay-overlay { align-items: center; }
+    .pay-card { border-radius: var(--radius); animation: cardReveal 0.25s ease both; }
+  }
+  .pay-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .pay-card-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pay-close {
+    background: var(--surface);
+    border: none;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--ink-light);
+    font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .pay-close:hover { background: var(--border); }
+  .pay-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .pay-row-info { display: flex; flex-direction: column; gap: 2px; }
+  .pay-row-lbl {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+  .pay-row-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--ink);
+    letter-spacing: 0.5px;
+  }
+  .pay-copy-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .pay-copy-btn:hover { background: #145f41; }
+  .pay-copy-btn.copied { background: var(--accent-2); }
+  .pay-note {
+    font-size: 0.82rem;
+    color: var(--ink-light);
+    line-height: 1.6;
+    margin-top: 6px;
+  }
+
+  /* ============================================================
      FOOTER
   ============================================================ */
   .footer {
@@ -543,6 +811,10 @@
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
   /* ============================================================
      MOBILE
@@ -552,6 +824,8 @@
     .tc-cell:last-child { grid-column: 1 / -1; }
     .info-strip { flex-wrap: wrap; }
     .info-pill { min-width: calc(50% - 5px); flex: none; }
+    .pay-fab-label { display: none; }
+    .pay-fab:hover { padding: 14px; }
   }
 </style>
 </head>
@@ -571,6 +845,48 @@
   </svg>
   <span class="wa-fab-label">Chat Caretaker</span>
 </a>
+
+<!-- ============================================================
+     PAYBILL FLOATING WIDGET (NEW)
+     TODO: Replace the paybill and account number below with your real details
+============================================================ -->
+<button class="pay-fab" id="payFabBtn" title="How to pay rent">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+  </svg>
+  <span class="pay-fab-label">How to Pay</span>
+</button>
+
+<div class="pay-overlay" id="payOverlay">
+  <div class="pay-card">
+    <div class="pay-card-head">
+      <div class="pay-card-title">💳 How to Pay Rent</div>
+      <button class="pay-close" id="payCloseBtn" aria-label="Close">✕</button>
+    </div>
+
+    <div class="pay-row">
+      <div class="pay-row-info">
+        <span class="pay-row-lbl">Paybill Number</span>
+        <span class="pay-row-val" id="paybillNum">522533</span>
+      </div>
+      <button class="pay-copy-btn" data-copy-target="paybillNum">Copy</button>
+    </div>
+
+    <div class="pay-row">
+      <div class="pay-row-info">
+        <span class="pay-row-lbl">Account Number</span>
+        <span class="pay-row-val" id="accountNum">7805043 #HOUSE N0</span>
+      </div>
+      <button class="pay-copy-btn" data-copy-target="accountNum">Copy</button>
+    </div>
+
+    <p class="pay-note">
+      Go to <strong>M-Pesa &rarr; Lipa na M-Pesa &rarr; Pay Bill</strong>, enter the Paybill number,
+      use the account number <strong>and #house number</strong> as the Account Number, then enter the amount and PIN to confirm.
+      Once paid, come back here and submit your payment proof below.
+    </p>
+  </div>
+</div>
 
 
 <div class="shell">
@@ -658,6 +974,8 @@
       <input type="hidden" id="f-house" name="house_number" />
       <input type="hidden" id="f-name"  name="tenant_name" />
       <input type="hidden" id="f-rent"  name="rent_amount" />
+      <input type="hidden" id="f-screenshot" name="screenshot_base64" />
+      <input type="hidden" id="f-screenshot-name" name="screenshot_filename" />
 
       <div class="field">
         <label for="f-bankMsg">Bank Payment Message <span>*</span></label>
@@ -670,7 +988,35 @@
         ></textarea>
       </div>
 
-    
+      <!-- ============================================================
+           IMAGE UPLOAD (NEW)
+      ============================================================ -->
+      <div class="field">
+        <label for="f-image">Payment Screenshot (optional)</label>
+
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="f-image" accept="image/*" aria-label="Upload payment screenshot" />
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 16V4M12 4l-5 5M12 4l5 5"/>
+              <path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/>
+            </svg>
+          </div>
+          <div class="upload-text">Tap to upload or take a photo</div>
+          <div class="upload-subtext">JPG or PNG, up to ~5MB</div>
+        </div>
+
+        <div class="upload-preview" id="uploadPreview">
+          <img id="uploadPreviewImg" src="" alt="Payment screenshot preview" />
+          <div class="upload-preview-bar">
+            <span class="upload-filename" id="uploadFilename">screenshot.jpg</span>
+            <button type="button" class="upload-remove" id="uploadRemoveBtn">Remove</button>
+          </div>
+        </div>
+
+        <div class="upload-processing" id="uploadProcessing">Processing image...</div>
+      </div>
+
       <div class="field">
         <label for="f-notes">Additional Notes (optional)</label>
         <textarea
@@ -692,6 +1038,16 @@
           required
           aria-required="true"
         />
+      </div>
+
+      <!-- ============================================================
+           SUBMIT-ONCE WARNING (NEW)
+      ============================================================ -->
+      <div class="submit-warning">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        </svg>
+        <p><strong>Please submit only once.</strong> Duplicate submissions can delay verification. If you don't see a confirmation, check your email or contact the caretaker on WhatsApp before resubmitting.</p>
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn" disabled>
@@ -727,7 +1083,7 @@ const TENANTS = [
   { houseNumber: "1A", tenantName: "KK", rentAmount: 30000 },
   { houseNumber: "1B", tenantName: "K K", rentAmount: 25150 },
   { houseNumber: "1C", tenantName: "KK", rentAmount: 10500 },
-  { houseNumber: "G4", tenantName: "PETER MUIGA", rentAmount: 9150 },
+  { houseNumber: "G4", tenantName: "THOMAS KAMAU M", rentAmount: 9150 },
   { houseNumber: "1D", tenantName: "K,K", rentAmount: 30000 },
   { houseNumber: "6(G5)", tenantName: "STEPHEN MUSYOKI", rentAmount: 23000 },
   { houseNumber: "G1", tenantName: "K.K", rentAmount: 12000 },
@@ -742,11 +1098,11 @@ const TENANTS = [
   { houseNumber: "17", tenantName: "FAITH NDINDA", rentAmount: 7500 },
   { houseNumber: "18A", tenantName: "IBRAHIM KARIUKI", rentAmount: 6500 },
   { houseNumber: "18B", tenantName: "JOHN KIPTONUI T", rentAmount: 6500 },
-  { houseNumber: "19A", tenantName: "KENNEDY", rentAmount: 6500 },
+  { houseNumber: "19A", tenantName: "SAMUEL JOHN", rentAmount: 6500 },
   { houseNumber: "19B", tenantName: "ESTHER WANJIKU", rentAmount: 6500 },
   { houseNumber: "20A", tenantName: "FAITH", rentAmount: 6000 },
   { houseNumber: "20B", tenantName: "FAITH", rentAmount: 6000 },
-  { houseNumber: "21", tenantName: "JAMES NDUNGU", rentAmount: 6500 },
+  { houseNumber: "21", tenantName: "NININAHAZWE", rentAmount: 6500 },
   { houseNumber: "22", tenantName: "CALEB WEKESA", rentAmount: 8000 },
   { houseNumber: "23", tenantName: "JILL NAVIL", rentAmount: 7500 },
   { houseNumber: "24A", tenantName: "ELVIS KAIGU", rentAmount: 6500 },
@@ -757,85 +1113,85 @@ const TENANTS = [
   { houseNumber: "27", tenantName: "MAUREEN NJURU", rentAmount: 6500 },
   { houseNumber: "28", tenantName: "CHARLES AMOTH", rentAmount: 0 },
   { houseNumber: "29", tenantName: "RONALD AMITA", rentAmount: 6500 },
-  { houseNumber: "30", tenantName: "DENNIS MWANGI", rentAmount: 6500 },
+  { houseNumber: "30", tenantName: "REGINA MWNDIKA", rentAmount: 6500 },
   { houseNumber: "31", tenantName: "DONALD BETT", rentAmount: 6500 },
   { houseNumber: "32", tenantName: "FAITH MWILI", rentAmount: 6500 },
   { houseNumber: "33", tenantName: "EDNA MOKAYA", rentAmount: 8000 },
   { houseNumber: "34", tenantName: "STEPHANIE KASINA", rentAmount: 8000 },
-  { houseNumber: "35", tenantName: "RUTH", rentAmount: 7000 },
+  { houseNumber: "35", tenantName: "RUTH", rentAmount: 0 },
   { houseNumber: "36", tenantName: "WINNIE JELAGAT", rentAmount: 6500 },
   { houseNumber: "37", tenantName: "MIRIAM WAGUTHI", rentAmount: 6500 },
   { houseNumber: "38", tenantName: "JOY M. WANJIKU N", rentAmount: 6500 },
-  { houseNumber: "39", tenantName: "CRAIG FURUKHA", rentAmount: 6500 },
+  { houseNumber: "39", tenantName: "VACANT", rentAmount: 6500 },
   { houseNumber: "40", tenantName: "VACANT", rentAmount: 6500 },
   { houseNumber: "41", tenantName: "MELODINA", rentAmount: 8000 },
   { houseNumber: "42", tenantName: "BRIAN KABIRU", rentAmount: 8000 },
   { houseNumber: "43", tenantName: "NANCY MUSYOKA", rentAmount: 6500 },
-  { houseNumber: "44", tenantName: "DIANAH MUOKI", rentAmount: 8000 },
+  { houseNumber: "44", tenantName: "DIANAH NGUNO", rentAmount: 8000 },
   { houseNumber: "45", tenantName: "CHRISTINE ADHIAMBO", rentAmount: 6500 },
   { houseNumber: "46", tenantName: "VYONNNE OKOTH", rentAmount: 6500 },
   { houseNumber: "47", tenantName: "FLORENCE MIKOYE", rentAmount: 6500 },
   { houseNumber: "48", tenantName: "ALEX NGUTA", rentAmount: 6500 },
-  { houseNumber: "49", tenantName: "VIVIVIAN SEEYIAN", rentAmount: 9000 },
-  { houseNumber: "50", tenantName: "PENNINAH", rentAmount: 8000 },
-  { houseNumber: "51", tenantName: "EDDER", rentAmount: 7500 },
+  { houseNumber: "49", tenantName: "MONICAH EDNA", rentAmount: 9000 },
+  { houseNumber: "50", tenantName: "GEOFFREY MAINA", rentAmount: 8000 },
+  { houseNumber: "51", tenantName: "JOSEPH RONO", rentAmount: 7500 },
   { houseNumber: "52", tenantName: "LYNN AKINYI", rentAmount: 6500 },
   { houseNumber: "53", tenantName: "DUNCAN NYAKUNDI", rentAmount: 6500 },
-  { houseNumber: "54", tenantName: "WILSON NDIRITU", rentAmount: 6500 },
-  { houseNumber: "55", tenantName: "WESLEY OBABI", rentAmount: 6500 },
-  { houseNumber: "56", tenantName: "PURITY", rentAmount: 6500 },
-  { houseNumber: "57", tenantName: "TERENCE ALFAYO", rentAmount: 8000 },
-  { houseNumber: "58", tenantName: "ASENATH", rentAmount: 8000 },
+  { houseNumber: "54", tenantName: "ANTONY WAMBUGU", rentAmount: 6500 },
+  { houseNumber: "55", tenantName: "CHARLES", rentAmount: 6500 },
+  { houseNumber: "56", tenantName: "BEATRICE", rentAmount: 6500 },
+  { houseNumber: "57", tenantName: "TERENCE", rentAmount: 8000 },
+  { houseNumber: "58", tenantName: "MERCY NYAMBURA", rentAmount: 8000 },
   { houseNumber: "59", tenantName: "CHRISTOPER MURAGE", rentAmount: 7000 },
   { houseNumber: "60", tenantName: "WAYNE MULAMA", rentAmount: 7500 },
   { houseNumber: "61", tenantName: "TECLA OLEKAKA", rentAmount: 6500 },
   { houseNumber: "62", tenantName: "STEPHEN MUTUVI", rentAmount: 6500 },
-  { houseNumber: "63", tenantName: "JACOB MUKONAMBI", rentAmount: 7000 },
-  { houseNumber: "64", tenantName: "STACY ODUOR", rentAmount: 0 },
+  { houseNumber: "63", tenantName: "DAISY NJOGU", rentAmount: 6500 },
+  { houseNumber: "64", tenantName: "ANTONINA MWANGI", rentAmount: 0 },
   { houseNumber: "65", tenantName: "VIRGINIA KAGWERE", rentAmount: 10000 },
   { houseNumber: "66", tenantName: "VINCENT", rentAmount: 8000 },
-  { houseNumber: "67", tenantName: "MONICA KIPCHUMBA", rentAmount: 7000 },
-  { houseNumber: "68", tenantName: "BLESSED WAMBUI", rentAmount: 7500 },
+  { houseNumber: "67", tenantName: "GLORIA MWIHAKI", rentAmount: 7000 },
+  { houseNumber: "68", tenantName: "BENADINE KI MUTAI", rentAmount: 6500 },
   { houseNumber: "69", tenantName: "CLAIRE CHEPKEMOI", rentAmount: 7000 },
-  { houseNumber: "70", tenantName: "CHRISTINE NJARAMBA", rentAmount: 6500 },
+  { houseNumber: "70", tenantName: "CHRISTINE MUTHONI", rentAmount: 6500 },
   { houseNumber: "71", tenantName: "WAYNE MULAMA", rentAmount: 6500 },
-  { houseNumber: "72", tenantName: "FLOWRENCE THIGE", rentAmount: 6500 },
+  { houseNumber: "72", tenantName: "VERONICAH MASINDE", rentAmount: 6500 },
   { houseNumber: "73", tenantName: "ROY MAINA", rentAmount: 7500 },
   { houseNumber: "74", tenantName: "BRIGTIER AWOUR", rentAmount: 6500 },
-  { houseNumber: "75", tenantName: "MATILDAH", rentAmount: 6500 },
-  { houseNumber: "76", tenantName: "EPHRAIM ", rentAmount: 6500 },
+  { houseNumber: "75", tenantName: "JULIET", rentAmount: 6500 },
+  { houseNumber: "76", tenantName: "RISPER", rentAmount: 6500 },
   { houseNumber: "77", tenantName: "DEBRA SANAIPEI", rentAmount: 6500 },
   { houseNumber: "78", tenantName: "DUNCAN KIPKEMOI", rentAmount: 6500 },
-  { houseNumber: "79", tenantName: "VAUREY HAWA", rentAmount: 6500 },
+  { houseNumber: "79", tenantName: "VALENTINE MORAA", rentAmount: 6500 },
   { houseNumber: "80", tenantName: "GODWIN OBIRIA", rentAmount: 7500 },
   { houseNumber: "81", tenantName: "SUSAN KINGORI", rentAmount: 10000 },
   { houseNumber: "82", tenantName: "DUNCAN KIPROP", rentAmount: 8000 },
   { houseNumber: "83", tenantName: "VACANT", rentAmount: 7500 },
   { houseNumber: "84", tenantName: "SADEL ONYANGO", rentAmount: 7500 },
-  { houseNumber: "85", tenantName: "EVALYNE", rentAmount: 6500 },
+  { houseNumber: "85", tenantName: "JACKLINE KYALO", rentAmount: 6500 },
   { houseNumber: "86", tenantName: "VIOLET ALIVIZA", rentAmount: 6500 },
   { houseNumber: "87", tenantName: "KEZZIAH", rentAmount: 6500 },
   { houseNumber: "88", tenantName: "FRIDAH MUTINDA", rentAmount: 6500 },
   { houseNumber: "89", tenantName: "NANCY INGIROSI", rentAmount: 0 },
-  { houseNumber: "90", tenantName: "DEBORAH CHEPNGENO", rentAmount: 8000 },
+  { houseNumber: "90", tenantName: "DEBORAH MARGOT", rentAmount: 8000 },
   { houseNumber: "91", tenantName: "FLORENE N", rentAmount: 6000 },
   { houseNumber: "92", tenantName: "SUSAN ATIENO", rentAmount: 4000 },
   { houseNumber: "93", tenantName: "CECILIA WANGECI K", rentAmount: 0 },
   { houseNumber: "94", tenantName: "STANTLEY NYAGUTHI", rentAmount: 0 },
-  { houseNumber: "95", tenantName: "JULIUS", rentAmount: 6500 },
+  { houseNumber: "95", tenantName: "FLORENE THALE", rentAmount: 6500 },
   { houseNumber: "96", tenantName: "RYMOD", rentAmount: 6500 },
-  { houseNumber: "97", tenantName: "BRENDA", rentAmount: 5500 },
-  { houseNumber: "98", tenantName: "STACY NJERI", rentAmount: 5500 },
-  { houseNumber: "99", tenantName: "FRANCIS", rentAmount: 5500 },
+  { houseNumber: "97", tenantName: "VYONNE NJUGUNA", rentAmount: 5500 },
+  { houseNumber: "98", tenantName: "JANE MACHARIA", rentAmount: 5500 },
+  { houseNumber: "99", tenantName: "BRIAN MURETI", rentAmount: 5500 },
   { houseNumber: "100", tenantName: "GEOFFREY", rentAmount: 5500 },
-  { houseNumber: "101", tenantName: "PURITY MWENDE", rentAmount: 5500 },
+  { houseNumber: "101", tenantName: "ANTONY ENTAYANG", rentAmount: 5500 },
   { houseNumber: "102", tenantName: "VICTOR KIOKO", rentAmount: 5500 },
   { houseNumber: "103", tenantName: "GRACE MUTAHI", rentAmount: 5500 },
   { houseNumber: "104", tenantName: "CHESIRE SIMON", rentAmount: 5500 },
   { houseNumber: "105", tenantName: "AILEEN KATHAMBI", rentAmount: 5500 },
   { houseNumber: "106", tenantName: "LAVENDA SIMIYU", rentAmount: 5500 },
   { houseNumber: "107", tenantName: "RITA CHERONO", rentAmount: 8000 },
-  { houseNumber: "108", tenantName: "ANN WANGOMBE", rentAmount: 6500 },
+  { houseNumber: "108", tenantName: "KELVIN NJUGUNA", rentAmount: 6500 },
 ];
 
 
@@ -844,11 +1200,6 @@ document.getElementById('totalUnits').textContent = "108";
 
 /* ================================================================
    EMAILJS CONFIGURATION
-   TODO: Replace with your actual EmailJS credentials from emailjs.com
-   1. Sign up free at https://www.emailjs.com
-   2. Create a service (Gmail, Outlook, etc.) -> get SERVICE_ID
-   3. Create an email template -> get TEMPLATE_ID
-   4. Copy your Public Key from Account -> API Keys
 ================================================================ */
 const EMAILJS_PUBLIC_KEY = "kC6jeiFALBTa4IA22";
 const EMAILJS_SERVICE_ID = "service_e6aqg2m";
@@ -937,8 +1288,10 @@ function selectTenant(tenant) {
   card.offsetHeight; /* force reflow */
   card.style.animation = 'cardReveal 0.35s ease both';
 
-  /* Enable submit button */
-  document.getElementById('submitBtn').disabled = false;
+  /* Enable submit button (unless already submitted this session) */
+  if (!hasSubmitted) {
+    document.getElementById('submitBtn').disabled = false;
+  }
 }
 
 /* CLEAR button */
@@ -951,6 +1304,148 @@ document.getElementById('clearBtn').addEventListener('click', () => {
   document.getElementById('f-name').value  = '';
   document.getElementById('f-rent').value  = '';
   hideStatus();
+});
+
+
+/* ================================================================
+   IMAGE UPLOAD LOGIC (NEW)
+   - Reads the selected/dropped image
+   - Resizes/compresses it client-side (keeps payload small)
+   - Converts to base64 and stores in the hidden form field
+================================================================ */
+const uploadZone       = document.getElementById('uploadZone');
+const fileInput        = document.getElementById('f-image');
+const uploadPreview     = document.getElementById('uploadPreview');
+const uploadPreviewImg  = document.getElementById('uploadPreviewImg');
+const uploadFilename    = document.getElementById('uploadFilename');
+const uploadRemoveBtn   = document.getElementById('uploadRemoveBtn');
+const uploadProcessing  = document.getElementById('uploadProcessing');
+const f_screenshot      = document.getElementById('f-screenshot');
+const f_screenshotName  = document.getElementById('f-screenshot-name');
+
+const MAX_DIMENSION = 1200;   // px, longest side after resize
+const JPEG_QUALITY   = 0.72;  // compression quality
+
+function resizeAndEncodeImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > MAX_DIMENSION) {
+          height = Math.round(height * (MAX_DIMENSION / width));
+          width = MAX_DIMENSION;
+        } else if (height > MAX_DIMENSION) {
+          width = Math.round(width * (MAX_DIMENSION / height));
+          height = MAX_DIMENSION;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', JPEG_QUALITY);
+        resolve(dataUrl);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleFile(file) {
+  if (!file || !file.type.startsWith('image/')) {
+    showStatus('error', 'Please choose a valid image file.');
+    return;
+  }
+  if (file.size > 8 * 1024 * 1024) {
+    showStatus('error', 'Image is too large. Please choose a file under 8MB.');
+    return;
+  }
+
+  uploadProcessing.classList.add('show');
+  try {
+    const dataUrl = await resizeAndEncodeImage(file);
+    f_screenshot.value = dataUrl;
+    f_screenshotName.value = file.name || 'screenshot.jpg';
+
+    uploadPreviewImg.src = dataUrl;
+    uploadFilename.textContent = file.name || 'screenshot.jpg';
+    uploadPreview.classList.add('show');
+    uploadZone.style.display = 'none';
+  } catch (err) {
+    console.error(err);
+    showStatus('error', 'Could not process that image. Please try another file.');
+  }
+  uploadProcessing.classList.remove('show');
+}
+
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) handleFile(file);
+});
+
+/* Drag & drop support (desktop) */
+['dragenter', 'dragover'].forEach(evt => {
+  uploadZone.addEventListener(evt, (e) => {
+    e.preventDefault();
+    uploadZone.classList.add('dragover');
+  });
+});
+['dragleave', 'drop'].forEach(evt => {
+  uploadZone.addEventListener(evt, (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+  });
+});
+uploadZone.addEventListener('drop', (e) => {
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+});
+
+uploadRemoveBtn.addEventListener('click', () => {
+  fileInput.value = '';
+  f_screenshot.value = '';
+  f_screenshotName.value = '';
+  uploadPreviewImg.src = '';
+  uploadPreview.classList.remove('show');
+  uploadZone.style.display = 'block';
+});
+
+
+/* ================================================================
+   PAYBILL FLOATING WIDGET LOGIC (NEW)
+================================================================ */
+const payFabBtn   = document.getElementById('payFabBtn');
+const payOverlay  = document.getElementById('payOverlay');
+const payCloseBtn = document.getElementById('payCloseBtn');
+
+payFabBtn.addEventListener('click', () => payOverlay.classList.add('open'));
+payCloseBtn.addEventListener('click', () => payOverlay.classList.remove('open'));
+payOverlay.addEventListener('click', (e) => {
+  if (e.target === payOverlay) payOverlay.classList.remove('open');
+});
+
+document.querySelectorAll('.pay-copy-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const targetId = btn.getAttribute('data-copy-target');
+    const text = document.getElementById(targetId).textContent.trim();
+    try {
+      await navigator.clipboard.writeText(text);
+      const original = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1500);
+    } catch (err) {
+      console.error('Copy failed', err);
+    }
+  });
 });
 
 
@@ -971,11 +1466,18 @@ function hideStatus() {
 }
 
 /* ================================================================
-   FORM SUBMISSION
+   FORM SUBMISSION (NEW: submit-once lock + image field included)
 ================================================================ */
+let hasSubmitted = false;
+
 document.getElementById('paymentForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   hideStatus();
+
+  if (hasSubmitted) {
+    showStatus('error', 'You have already submitted a payment proof this session. Please contact the caretaker if you need to make another submission.');
+    return;
+  }
 
   if (!selectedTenant) {
     showStatus('error', 'Please search and select your house number first.');
@@ -1001,62 +1503,62 @@ document.getElementById('paymentForm').addEventListener('submit', async function
   btn.classList.add('loading');
   btn.disabled = true;
 
-  /* Build template params for EmailJS
-     Make sure your EmailJS template uses these exact variable names:
+  /* Build template params
+     Make sure your Apps Script / EmailJS template can use these field names:
      {{house_number}}, {{tenant_name}}, {{rent_amount}},
-     {{bank_message}}, {{notes}}, {{tenant_email}}, {{submitted_at}}
+     {{bank_message}}, {{notes}}, {{tenant_email}}, {{submitted_at}},
+     {{screenshot_base64}}, {{screenshot_filename}}
   */
   const params = {
-    house_number:  selectedTenant.houseNumber,
-    tenant_name:   selectedTenant.tenantName,
-    rent_amount:   selectedTenant.rentAmount,
-    bank_message:  bankMsg,
-    notes:         document.getElementById('f-notes').value.trim() || 'None',
-    tenant_email:  email,
-    submitted_at:  new Date().toLocaleString('en-KE', { timeZone: 'Africa/Nairobi' }),
+    house_number:       selectedTenant.houseNumber,
+    tenant_name:         selectedTenant.tenantName,
+    rent_amount:         selectedTenant.rentAmount,
+    bank_message:        bankMsg,
+    notes:                document.getElementById('f-notes').value.trim() || 'None',
+    tenant_email:         email,
+    submitted_at:         new Date().toLocaleString('en-KE', { timeZone: 'Africa/Nairobi' }),
+    screenshot_base64:    f_screenshot.value || '',
+    screenshot_filename:  f_screenshotName.value || '',
   };
 
- 
-try {
+  try {
+    const formData = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      formData.append(key, params[key]);
+    });
 
-  const formData = new URLSearchParams();
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: formData
+    });
 
-Object.keys(params).forEach(key=>{
-    formData.append(key, params[key]);
-});
-console.log("Starting submission...");
-console.log(params);
-console.log("Fetch finished");
-const response = await fetch(SCRIPT_URL,{
-    method:"POST",
-    body:formData
-});
+    if (!response.ok) {
+      throw new Error("Failed to save payment.");
+    }
 
-  if (!response.ok) {
-    throw new Error("Failed to save payment.");
+    showStatus(
+      'success',
+      'Payment proof submitted successfully! The caretaker has been notified and a confirmation email has been sent.'
+    );
+
+    /* Lock the form so it can't be submitted again this session */
+    hasSubmitted = true;
+    btn.classList.remove('loading');
+    btn.classList.add('submitted');
+    btn.querySelector('.btn-text').textContent = 'Submitted ✓';
+    btn.disabled = true;
+
+  } catch (err) {
+    console.error(err);
+    showStatus(
+      'error',
+      'Submission failed. ' + (err.message || 'Unknown error')
+    );
+    /* Only re-enable the button on failure, so they can retry */
+    btn.classList.remove('loading');
+    btn.disabled = false;
   }
-
-  showStatus(
-    'success',
-    'Payment proof submitted successfully! The caretaker has been notified and a confirmation email has been sent.'
-  );
-
-  document.getElementById('f-bankMsg').value = '';
-  document.getElementById('f-notes').value = '';
-  document.getElementById('f-email').value = '';
-
-} catch (err) {
-  console.error(err);
-
-  showStatus(
-    'error',
-    'Submission failed. ' + (err.message || 'Unknown error')
-  );
-}
-
-  /* Reset button state */
-  btn.classList.remove('loading');
-  btn.disabled = false;
-});</script>
+});
+</script>
 </body>
 </html>
