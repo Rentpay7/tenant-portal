@@ -128,25 +128,21 @@
     display: flex;
     justify-content: center;
     margin-top: 18px;
-    padding: 0 4px;
     animation: fadeDown 0.6s 0.05s ease both;
   }
   .typewriter-pill {
     display: inline-flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 8px;
-    width: 100%;
-    max-width: 480px;
+    max-width: 100%;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 10px 18px;
+    border-radius: 30px;
+    padding: 9px 18px;
     box-shadow: var(--shadow-sm);
-    text-align: left;
   }
   .typewriter-dot {
     width: 7px; height: 7px;
-    margin-top: 6px;
     border-radius: 50%;
     background: var(--accent-2);
     flex-shrink: 0;
@@ -156,9 +152,9 @@
     font-size: 0.82rem;
     font-weight: 500;
     color: var(--ink-light);
-    white-space: normal;
-    word-break: break-word;
-    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
   }
   .typewriter-cursor {
     display: inline-block;
@@ -170,8 +166,8 @@
     animation: blink 0.85s steps(1) infinite;
   }
   @media (max-width: 480px) {
-    .typewriter-pill { padding: 9px 14px; border-radius: 16px; }
-    .typewriter-text { font-size: 0.76rem; }
+    .typewriter-pill { padding: 8px 14px; }
+    .typewriter-text { font-size: 0.75rem; max-width: 68vw; }
   }
 
   /* ============================================================
@@ -1162,7 +1158,7 @@
 
   <footer class="footer">
     Having trouble? &nbsp;
-    <a href="https://wa.me/254795665527" target="_blank" rel="noopener">
+    <a href="https://wa.me/254700000000" target="_blank" rel="noopener">
       Contact the Caretaker directly on WhatsApp
     </a>
     <br/><br/>
@@ -1176,22 +1172,25 @@
 /* ================================================================
    TENANT DATA
 ================================================================ */
+
+const TENANTS = [
+
   { houseNumber: "1A", tenantName: "KK", rentAmount: 30000 },
   { houseNumber: "1B", tenantName: "K K", rentAmount: 25150 },
-  { houseNumber: "1C", tenantName: "KK", rentAmount: 11000 },
+  { houseNumber: "1C", tenantName: "KK", rentAmount: 10500 },
   { houseNumber: "G4", tenantName: "PETER MUIGA", rentAmount: 9150 },
   { houseNumber: "1D", tenantName: "K,K", rentAmount: 30000 },
   { houseNumber: "6(G5)", tenantName: "STEPHEN MUSYOKI", rentAmount: 23000 },
   { houseNumber: "G1", tenantName: "K.K", rentAmount: 12000 },
   { houseNumber: "7B", tenantName: "K K", rentAmount: 5000 },
-  { houseNumber: "8A", tenantName: "RONNIE ODHIAMBO", rentAmount: 7500 },
+  { houseNumber: "8A", tenantName: "RONNIE ODHIAMBO", rentAmount: 8150 },
   { houseNumber: "9", tenantName: "MICHAEL SAMORA", rentAmount: 9000 },
-  { houseNumber: "11A", tenantName: "SAMORA MICHAEL", rentAmount: 9500 },
-  { houseNumber: "12", tenantName: "BENARD JASTINE", rentAmount: 8500 },
-  { houseNumber: "13", tenantName: "ANTONIA GRACE", rentAmount: 8000 },
-  { houseNumber: "14A", tenantName: "LAVENDA ANYANGO", rentAmount: 6500 },
-  { houseNumber: "15", tenantName: "WINJOY GATWIRI", rentAmount: 8000 },
-  { houseNumber: "17", tenantName: "DIANA NDEGWA", rentAmount: 7500 },
+  { houseNumber: "11A", tenantName: "SAMIORA MICHAEL", rentAmount: 9000 },
+  { houseNumber: "12", tenantName: "BENARD JASTINE", rentAmount: 8000 },
+  { houseNumber: "13", tenantName: "NATHAN TOWETT", rentAmount: 8000 },
+  { houseNumber: "14A", tenantName: "MILICENT ATIENO", rentAmount: 6500 },
+  { houseNumber: "15", tenantName: "LORINE NJOROGE", rentAmount: 8000 },
+  { houseNumber: "17", tenantName: "FAITH NDINDA", rentAmount: 7500 },
   { houseNumber: "18A", tenantName: "IBRAHIM KARIUKI", rentAmount: 6500 },
   { houseNumber: "18B", tenantName: "JOHN KIPTONUI T", rentAmount: 6500 },
   { houseNumber: "19A", tenantName: "KENNEDY", rentAmount: 6500 },
@@ -1201,13 +1200,13 @@
   { houseNumber: "21", tenantName: "JAMES NDUNGU", rentAmount: 6500 },
   { houseNumber: "22", tenantName: "CALEB WEKESA", rentAmount: 8000 },
   { houseNumber: "23", tenantName: "JILL NAVIL", rentAmount: 7500 },
-  { houseNumber: "24A", tenantName: "ELVIS KAIGA", rentAmount: 6500 },
-  { houseNumber: "24B", tenantName: "RICHARD OMONDI", rentAmount: 6500 },
+  { houseNumber: "24A", tenantName: "ELVIS KAIGU", rentAmount: 6500 },
+  { houseNumber: "24B", tenantName: "ARTHUR", rentAmount: 6500 },
   { houseNumber: "25A", tenantName: "VACANT", rentAmount: 6500 },
   { houseNumber: "25B", tenantName: "VACANT", rentAmount: 6500 },
   { houseNumber: "26", tenantName: "JOHN MUTUYA", rentAmount: 8000 },
   { houseNumber: "27", tenantName: "MAUREEN NJURU", rentAmount: 6500 },
-  { houseNumber: "28", tenantName: "CHARLES AMOTH", rentAmount: 8000 },
+  { houseNumber: "28", tenantName: "CHARLES AMOTH", rentAmount: 0 },
   { houseNumber: "29", tenantName: "RONALD AMITA", rentAmount: 6500 },
   { houseNumber: "30", tenantName: "DENNIS MWANGI", rentAmount: 6500 },
   { houseNumber: "31", tenantName: "DONALD BETT", rentAmount: 6500 },
@@ -1215,39 +1214,39 @@
   { houseNumber: "33", tenantName: "EDNA MOKAYA", rentAmount: 8000 },
   { houseNumber: "34", tenantName: "STEPHANIE KASINA", rentAmount: 8000 },
   { houseNumber: "35", tenantName: "RUTH", rentAmount: 7000 },
-  { houseNumber: "36", tenantName: "ALI RAI", rentAmount: 6500 },
-  { houseNumber: "37", tenantName: "MIRIAM MUTHONI", rentAmount: 6500 },
-  { houseNumber: "38", tenantName: "WINFRED MUSYOKI", rentAmount: 6500 },
+  { houseNumber: "36", tenantName: "WINNIE JELAGAT", rentAmount: 6500 },
+  { houseNumber: "37", tenantName: "MIRIAM WAGUTHI", rentAmount: 6500 },
+  { houseNumber: "38", tenantName: "JOY M. WANJIKU N", rentAmount: 6500 },
   { houseNumber: "39", tenantName: "CRAIG FURUKHA", rentAmount: 6500 },
-  { houseNumber: "40", tenantName: "VACANT", rentAmount: 7000 },
+  { houseNumber: "40", tenantName: "VACANT", rentAmount: 6500 },
   { houseNumber: "41", tenantName: "MELODINA", rentAmount: 8000 },
   { houseNumber: "42", tenantName: "BRIAN KABIRU", rentAmount: 8000 },
   { houseNumber: "43", tenantName: "NANCY MUSYOKA", rentAmount: 6500 },
   { houseNumber: "44", tenantName: "DIANAH MUOKI", rentAmount: 8000 },
   { houseNumber: "45", tenantName: "CHRISTINE ADHIAMBO", rentAmount: 6500 },
   { houseNumber: "46", tenantName: "VYONNNE OKOTH", rentAmount: 6500 },
-  { houseNumber: "47", tenantName: "PURITY NATASHA", rentAmount: 6500 },
+  { houseNumber: "47", tenantName: "FLORENCE MIKOYE", rentAmount: 6500 },
   { houseNumber: "48", tenantName: "ALEX NGUTA", rentAmount: 6500 },
   { houseNumber: "49", tenantName: "VIVIVIAN SEEYIAN", rentAmount: 9000 },
   { houseNumber: "50", tenantName: "PENNINAH", rentAmount: 8000 },
   { houseNumber: "51", tenantName: "EDDER", rentAmount: 7500 },
-  { houseNumber: "52", tenantName: "ESTHER MWATHI", rentAmount: 6500 },
+  { houseNumber: "52", tenantName: "LYNN AKINYI", rentAmount: 6500 },
   { houseNumber: "53", tenantName: "DUNCAN NYAKUNDI", rentAmount: 6500 },
   { houseNumber: "54", tenantName: "WILSON NDIRITU", rentAmount: 6500 },
   { houseNumber: "55", tenantName: "WESLEY OBABI", rentAmount: 6500 },
   { houseNumber: "56", tenantName: "PURITY", rentAmount: 6500 },
-  { houseNumber: "57", tenantName: "TERENCE ALFAYO", rentAmount: 6500 },
+  { houseNumber: "57", tenantName: "TERENCE ALFAYO", rentAmount: 8000 },
   { houseNumber: "58", tenantName: "ASENATH", rentAmount: 8000 },
   { houseNumber: "59", tenantName: "CHRISTOPER MURAGE", rentAmount: 7000 },
   { houseNumber: "60", tenantName: "WAYNE MULAMA", rentAmount: 7500 },
-  { houseNumber: "61", tenantName: "TECLA OLEKAKA", rentAmount: 7500 },
+  { houseNumber: "61", tenantName: "TECLA OLEKAKA", rentAmount: 6500 },
   { houseNumber: "62", tenantName: "STEPHEN MUTUVI", rentAmount: 6500 },
-  { houseNumber: "63", tenantName: "JACOB MUKONAMBI", rentAmount: 6500 },
-  { houseNumber: "64", tenantName: "STAICY ODUOR", rentAmount: 6500 },
+  { houseNumber: "63", tenantName: "JACOB MUKONAMBI", rentAmount: 7000 },
+  { houseNumber: "64", tenantName: "STACY ODUOR", rentAmount: 0 },
   { houseNumber: "65", tenantName: "VIRGINIA KAGWERE", rentAmount: 10000 },
   { houseNumber: "66", tenantName: "VINCENT", rentAmount: 8000 },
   { houseNumber: "67", tenantName: "MONICA KIPCHUMBA", rentAmount: 7000 },
-  { houseNumber: "68", tenantName: "BLESSED WAMBUI", rentAmount: 7000 },
+  { houseNumber: "68", tenantName: "BLESSED WAMBUI", rentAmount: 7500 },
   { houseNumber: "69", tenantName: "CLAIRE CHEPKEMOI", rentAmount: 7000 },
   { houseNumber: "70", tenantName: "CHRISTINE NJARAMBA", rentAmount: 6500 },
   { houseNumber: "71", tenantName: "WAYNE MULAMA", rentAmount: 6500 },
@@ -1255,37 +1254,37 @@
   { houseNumber: "73", tenantName: "ROY MAINA", rentAmount: 7500 },
   { houseNumber: "74", tenantName: "BRIGTIER AWOUR", rentAmount: 6500 },
   { houseNumber: "75", tenantName: "MATILDAH", rentAmount: 6500 },
-  { houseNumber: "76", tenantName: "EPHRAIM ", rentAmount: 8000 },
-  { houseNumber: "77", tenantName: "FELISTUS WILSON", rentAmount: 6500 },
+  { houseNumber: "76", tenantName: "EPHRAIM ", rentAmount: 6500 },
+  { houseNumber: "77", tenantName: "DEBRA SANAIPEI", rentAmount: 6500 },
   { houseNumber: "78", tenantName: "DUNCAN KIPKEMOI", rentAmount: 6500 },
   { houseNumber: "79", tenantName: "VAUREY HAWA", rentAmount: 6500 },
   { houseNumber: "80", tenantName: "GODWIN OBIRIA", rentAmount: 7500 },
   { houseNumber: "81", tenantName: "SUSAN KINGORI", rentAmount: 10000 },
   { houseNumber: "82", tenantName: "DUNCAN KIPROP", rentAmount: 8000 },
   { houseNumber: "83", tenantName: "VACANT", rentAmount: 7500 },
-  { houseNumber: "84", tenantName: "SANDREL OMAMO", rentAmount: 7500 },
+  { houseNumber: "84", tenantName: "SADEL ONYANGO", rentAmount: 7500 },
   { houseNumber: "85", tenantName: "EVALYNE", rentAmount: 6500 },
   { houseNumber: "86", tenantName: "VIOLET ALIVIZA", rentAmount: 6500 },
-  { houseNumber: "87", tenantName: "EMMANUEL ", rentAmount: 6500 },
+  { houseNumber: "87", tenantName: "KEZZIAH", rentAmount: 6500 },
   { houseNumber: "88", tenantName: "FRIDAH MUTINDA", rentAmount: 6500 },
-  { houseNumber: "89", tenantName: "NANCY INGIROSI", rentAmount: 6500 },
+  { houseNumber: "89", tenantName: "NANCY INGIROSI", rentAmount: 0 },
   { houseNumber: "90", tenantName: "DEBORAH CHEPNGENO", rentAmount: 8000 },
-  { houseNumber: "91", tenantName: "DIANA CHERUIYOT", rentAmount: 6000 },
-  { houseNumber: "92", tenantName: "HARRIET JUMASON", rentAmount: 8000 },
-  { houseNumber: "93", tenantName: "WINNIE WAMBUI", rentAmount: 6000 },
-  { houseNumber: "94", tenantName: "STANTLEY NYAGUTHI", rentAmount: 6000 },
+  { houseNumber: "91", tenantName: "FLORENE N", rentAmount: 6000 },
+  { houseNumber: "92", tenantName: "NICHOLAS SIMIYU", rentAmount: 8000 },
+  { houseNumber: "93", tenantName: "CECILIA WANGECI K", rentAmount: 0 },
+  { houseNumber: "94", tenantName: "STANTLEY NYAGUTHI", rentAmount: 0 },
   { houseNumber: "95", tenantName: "JULIUS", rentAmount: 6500 },
   { houseNumber: "96", tenantName: "RYMOD", rentAmount: 6500 },
-  { houseNumber: "97", tenantName: "BRENDA", rentAmount: 6000 },
-  { houseNumber: "98", tenantName: "STACY NJERI", rentAmount: 6000 },
-  { houseNumber: "99", tenantName: "FRANCIS", rentAmount: 6000 },
-  { houseNumber: "100", tenantName: "GEOFFREY", rentAmount: 6000 },
-  { houseNumber: "101", tenantName: "PURITY MWENDE", rentAmount: 6000 },
-  { houseNumber: "102", tenantName: "BRILLIANT", rentAmount: 6000 },
-  { houseNumber: "103", tenantName: "GRACE MUTAHI", rentAmount: 6000 },
-  { houseNumber: "104", tenantName: "CHESIRE SIMON", rentAmount: 6000 },
-  { houseNumber: "105", tenantName: "AILEEN KATHAMBI", rentAmount: 6000 },
-  { houseNumber: "106", tenantName: "LAVENDA SIMIYU", rentAmount: 6000 },
+  { houseNumber: "97", tenantName: "BRENDA", rentAmount: 5500 },
+  { houseNumber: "98", tenantName: "STACY NJERI", rentAmount: 5500 },
+  { houseNumber: "99", tenantName: "FRANCIS", rentAmount: 5500 },
+  { houseNumber: "100", tenantName: "GEOFFREY", rentAmount: 5500 },
+  { houseNumber: "101", tenantName: "PURITY MWENDE", rentAmount: 5500 },
+  { houseNumber: "102", tenantName: "VICTOR KIOKO", rentAmount: 5500 },
+  { houseNumber: "103", tenantName: "GRACE MUTAHI", rentAmount: 5500 },
+  { houseNumber: "104", tenantName: "CHESIRE SIMON", rentAmount: 5500 },
+  { houseNumber: "105", tenantName: "AILEEN KATHAMBI", rentAmount: 5500 },
+  { houseNumber: "106", tenantName: "LAVENDA SIMIYU", rentAmount: 5500 },
   { houseNumber: "107", tenantName: "RITA CHERONO", rentAmount: 8000 },
   { houseNumber: "108", tenantName: "ANN WANGOMBE", rentAmount: 6500 },
 ];
@@ -1504,8 +1503,6 @@ async function handleFile(file) {
   try {
     const dataUrl = await resizeAndEncodeImage(file);
     f_screenshot.value = dataUrl;
-    console.log("Image encoded successfully");
-    console.log(dataUrl.substring(0, 50));
     f_screenshotName.value = file.name || 'screenshot.jpg';
 
     uploadPreviewImg.src = dataUrl;
