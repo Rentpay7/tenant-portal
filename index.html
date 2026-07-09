@@ -122,7 +122,7 @@
   }
 
   /* ============================================================
-     TYPEWRITER STRIP (NEW)
+     TYPEWRITER STRIP
   ============================================================ */
   .typewriter-wrap {
     display: flex;
@@ -424,102 +424,69 @@
   .field textarea { min-height: 110px; }
 
   /* ============================================================
-     IMAGE UPLOAD
+     APPRECIATION BANNER (replaces image upload)
+     A calm, animated thank-you card: a soft shine sweep passes
+     across it periodically, and short appreciation messages
+     crossfade in and out. A small heart icon gently pulses.
   ============================================================ */
-  .upload-zone {
+  .appreciation-box {
     position: relative;
-    border: 2px dashed var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--surface);
-    padding: 22px 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .upload-zone:hover,
-  .upload-zone.dragover {
-    border-color: var(--accent-2);
-    background: var(--accent-glow);
-  }
-  .upload-zone input[type="file"] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-  }
-  .upload-icon {
-    width: 38px; height: 38px;
-    margin: 0 auto 10px;
-    border-radius: 50%;
-    background: var(--accent-glow);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .upload-icon svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 2; }
-  .upload-text {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 3px;
-  }
-  .upload-subtext {
-    font-size: 0.78rem;
-    color: var(--ink-light);
-  }
-  .upload-preview {
-    display: none;
-    position: relative;
-    border-radius: var(--radius-sm);
     overflow: hidden;
-    border: 2px solid var(--border);
-    background: var(--surface);
-  }
-  .upload-preview.show { display: block; }
-  .upload-preview img {
-    display: block;
-    width: 100%;
-    max-height: 260px;
-    object-fit: contain;
-    background: #eef3f0;
-  }
-  .upload-preview-bar {
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, #eefaf3 0%, #e4f5ec 100%);
+    border: 1px solid var(--border);
+    padding: 22px 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-    background: var(--card);
-    border-top: 1px solid var(--border);
+    gap: 16px;
   }
-  .upload-filename {
-    font-size: 0.8rem;
-    color: var(--ink-light);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 70%;
+  .appreciation-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -60%;
+    width: 55%; height: 100%;
+    background: linear-gradient(
+      100deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.55) 50%,
+      rgba(255,255,255,0) 100%
+    );
+    transform: skewX(-20deg);
+    animation: shineSweep 5s ease-in-out infinite;
   }
-  .upload-remove {
-    background: var(--warn-glow);
-    color: var(--warn);
-    border: none;
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    font-family: 'Syne', sans-serif;
-    cursor: pointer;
-    transition: background 0.2s;
+  .appreciation-icon {
+    flex-shrink: 0;
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(26,122,82,0.25);
+    animation: heartBeat 2.4s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
   }
-  .upload-remove:hover { background: rgba(232,104,58,0.22); }
-  .upload-processing {
-    font-size: 0.8rem;
-    color: var(--accent);
-    font-weight: 600;
-    margin-top: 8px;
-    display: none;
+  .appreciation-icon svg { width: 22px; height: 22px; fill: #fff; }
+  .appreciation-content {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
-  .upload-processing.show { display: block; }
+  .appreciation-text {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .appreciation-text.fade-in { animation: fadeSlideIn 0.5s ease both; }
+  .appreciation-text.fade-out { animation: fadeSlideOut 0.5s ease both; }
+  @media (max-width: 480px) {
+    .appreciation-box { padding: 18px 16px; gap: 12px; }
+    .appreciation-icon { width: 40px; height: 40px; }
+    .appreciation-text { font-size: 0.85rem; }
+  }
 
   /* SUBMIT BTN */
   .submit-btn {
@@ -623,7 +590,7 @@
   }
 
   /* ============================================================
-     CONFETTI SURPRISE (NEW)
+     CONFETTI SURPRISE
   ============================================================ */
   .confetti-piece {
     position: fixed;
@@ -905,6 +872,26 @@
     from { transform: translateY(0) rotate(0deg); opacity: 1; }
     to   { transform: translateY(100vh) rotate(600deg); opacity: 0; }
   }
+  @keyframes shineSweep {
+    0%   { left: -60%; }
+    45%  { left: 130%; }
+    100% { left: 130%; }
+  }
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    15%      { transform: scale(1.15); }
+    30%      { transform: scale(1); }
+    45%      { transform: scale(1.1); }
+    60%      { transform: scale(1); }
+  }
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeSlideOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-6px); }
+  }
 
   /* ============================================================
      MOBILE
@@ -999,7 +986,7 @@
     <p>Search for your house, confirm your details, and forward your bank message  directly to the caretaker.</p>
 
     <!-- ============================================================
-         TYPEWRITER STRIP (NEW)
+         TYPEWRITER STRIP
          Rotates short helper messages, including a simplified prompt
          to contact the caretaker via WhatsApp for house issues.
     ============================================================ -->
@@ -1079,8 +1066,6 @@
       <input type="hidden" id="f-house" name="house_number" />
       <input type="hidden" id="f-name"  name="tenant_name" />
       <input type="hidden" id="f-rent"  name="rent_amount" />
-      <input type="hidden" id="f-screenshot" name="screenshot_base64" />
-      <input type="hidden" id="f-screenshot-name" name="screenshot_filename" />
 
       <div class="field">
         <label for="f-bankMsg">Bank Payment Message <span>*</span></label>
@@ -1093,31 +1078,21 @@
         ></textarea>
       </div>
 
-      <!-- IMAGE UPLOAD -->
+      <!-- ============================================================
+           APPRECIATION BANNER (replaces the old screenshot upload)
+           A calm animated thank-you message for tenants.
+      ============================================================ -->
       <div class="field">
-        <label for="f-image">Payment Screenshot (optional)</label>
-
-        <div class="upload-zone" id="uploadZone">
-          <input type="file" id="f-image" accept="image/*" aria-label="Upload payment screenshot" />
-          <div class="upload-icon">
+        <div class="appreciation-box">
+          <div class="appreciation-icon">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 16V4M12 4l-5 5M12 4l5 5"/>
-              <path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/>
+              <path d="M12 21s-6.7-4.35-9.3-8.28C1.02 10.1 1.6 6.9 4.2 5.3c2.2-1.35 4.9-.8 6.4 1.1.5.63.9 1.3 1.4 1.9.5-.6.9-1.27 1.4-1.9 1.5-1.9 4.2-2.45 6.4-1.1 2.6 1.6 3.18 4.8 1.5 7.42C18.7 16.65 12 21 12 21z"/>
             </svg>
           </div>
-          <div class="upload-text">Tap to upload or take a photo</div>
-          <div class="upload-subtext">JPG or PNG, up to ~5MB</div>
-        </div>
-
-        <div class="upload-preview" id="uploadPreview">
-          <img id="uploadPreviewImg" src="" alt="Payment screenshot preview" />
-          <div class="upload-preview-bar">
-            <span class="upload-filename" id="uploadFilename">screenshot.jpg</span>
-            <button type="button" class="upload-remove" id="uploadRemoveBtn">Remove</button>
+          <div class="appreciation-content">
+            <span class="appreciation-text fade-in" id="appreciationText"></span>
           </div>
         </div>
-
-        <div class="upload-processing" id="uploadProcessing">Processing image...</div>
       </div>
 
       <div class="field">
@@ -1306,11 +1281,12 @@ const EMAILJS_SERVICE_ID = "service_e6aqg2m";
 const EMAILJS_TEMPLATE_ID = "template_hbe58mp";
 const EMAILJS_AUTOREPLY_TEMPLATE_ID = "template_fnv2ih7";
 /* Init EmailJS */
+
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-Cyohww-9_JoEir5KT5cHEGj4CkFvwZtuAqEGSyS9TqoEdXE50ZDGYMSB9Fi1yuMI/exec";
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
 /* ================================================================
-   TYPEWRITER STRIP LOGIC (NEW)
+   TYPEWRITER STRIP LOGIC
    Cycles through short helper phrases, one letter at a time.
    Includes a simplified WhatsApp/caretaker prompt.
 ================================================================ */
@@ -1352,6 +1328,42 @@ const TYPEWRITER_PHRASES = [
     }
   }
   tick();
+})();
+
+/* ================================================================
+   APPRECIATION BANNER LOGIC (NEW)
+   Crossfades through a rotation of short thank-you messages.
+   Distinct from the typewriter above: this fades whole lines
+   in and out, rather than typing letter by letter, so the two
+   animated strips feel different from one another.
+================================================================ */
+const APPRECIATION_MESSAGES = [
+  "Thank you for calling Baraka Plaza home. 🏡",
+  "We appreciate your prompt payments every month — it truly makes a difference.",
+  "Grateful to have tenants like you as part of the Baraka Plaza family.",
+  "Your trust and support keep this community thriving. Thank you!",
+];
+
+(function appreciationLoop() {
+  const el = document.getElementById('appreciationText');
+  let index = 0;
+
+  function showNext() {
+    el.textContent = APPRECIATION_MESSAGES[index];
+    el.classList.remove('fade-out');
+    el.classList.add('fade-in');
+  }
+
+  showNext();
+
+  setInterval(() => {
+    el.classList.remove('fade-in');
+    el.classList.add('fade-out');
+    setTimeout(() => {
+      index = (index + 1) % APPRECIATION_MESSAGES.length;
+      showNext();
+    }, 480); // matches fade-out animation duration
+  }, 4200);
 })();
 
 /* ================================================================
@@ -1448,113 +1460,6 @@ document.getElementById('clearBtn').addEventListener('click', () => {
 
 
 /* ================================================================
-   IMAGE UPLOAD LOGIC
-================================================================ */
-const uploadZone       = document.getElementById('uploadZone');
-const fileInput        = document.getElementById('f-image');
-const uploadPreview     = document.getElementById('uploadPreview');
-const uploadPreviewImg  = document.getElementById('uploadPreviewImg');
-const uploadFilename    = document.getElementById('uploadFilename');
-const uploadRemoveBtn   = document.getElementById('uploadRemoveBtn');
-const uploadProcessing  = document.getElementById('uploadProcessing');
-const f_screenshot      = document.getElementById('f-screenshot');
-const f_screenshotName  = document.getElementById('f-screenshot-name');
-
-const MAX_DIMENSION = 1200;
-const JPEG_QUALITY   = 0.72;
-
-function resizeAndEncodeImage(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        let { width, height } = img;
-        if (width > height && width > MAX_DIMENSION) {
-          height = Math.round(height * (MAX_DIMENSION / width));
-          width = MAX_DIMENSION;
-        } else if (height > MAX_DIMENSION) {
-          width = Math.round(width * (MAX_DIMENSION / height));
-          height = MAX_DIMENSION;
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-        const dataUrl = canvas.toDataURL('image/jpeg', JPEG_QUALITY);
-        resolve(dataUrl);
-      };
-      img.onerror = reject;
-      img.src = e.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-async function handleFile(file) {
-  if (!file || !file.type.startsWith('image/')) {
-    showStatus('error', 'Please choose a valid image file.');
-    return;
-  }
-  if (file.size > 8 * 1024 * 1024) {
-    showStatus('error', 'Image is too large. Please choose a file under 8MB.');
-    return;
-  }
-
-  uploadProcessing.classList.add('show');
-  try {
-    const dataUrl = await resizeAndEncodeImage(file);
-    f_screenshot.value = dataUrl;
-    console.log("Image encoded successfully");
-    console.log(dataUrl.substring(0, 50));
-    f_screenshotName.value = file.name || 'screenshot.jpg';
-
-    uploadPreviewImg.src = dataUrl;
-    uploadFilename.textContent = file.name || 'screenshot.jpg';
-    uploadPreview.classList.add('show');
-    uploadZone.style.display = 'none';
-  } catch (err) {
-    console.error(err);
-    showStatus('error', 'Could not process that image. Please try another file.');
-  }
-  uploadProcessing.classList.remove('show');
-}
-
-fileInput.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (file) handleFile(file);
-});
-
-['dragenter', 'dragover'].forEach(evt => {
-  uploadZone.addEventListener(evt, (e) => {
-    e.preventDefault();
-    uploadZone.classList.add('dragover');
-  });
-});
-['dragleave', 'drop'].forEach(evt => {
-  uploadZone.addEventListener(evt, (e) => {
-    e.preventDefault();
-    uploadZone.classList.remove('dragover');
-  });
-});
-uploadZone.addEventListener('drop', (e) => {
-  const file = e.dataTransfer.files[0];
-  if (file) handleFile(file);
-});
-
-uploadRemoveBtn.addEventListener('click', () => {
-  fileInput.value = '';
-  f_screenshot.value = '';
-  f_screenshotName.value = '';
-  uploadPreviewImg.src = '';
-  uploadPreview.classList.remove('show');
-  uploadZone.style.display = 'block';
-});
-
-
-/* ================================================================
    PAYBILL FLOATING WIDGET LOGIC
 ================================================================ */
 const payFabBtn   = document.getElementById('payFabBtn');
@@ -1588,7 +1493,7 @@ document.querySelectorAll('.pay-copy-btn').forEach(btn => {
 
 
 /* ================================================================
-   CONFETTI SURPRISE (NEW)
+   CONFETTI SURPRISE
    A small celebratory burst fired on successful submission.
 ================================================================ */
 function fireConfetti() {
@@ -1679,8 +1584,6 @@ document.getElementById('paymentForm').addEventListener('submit', async function
     notes:                document.getElementById('f-notes').value.trim() || 'None',
     tenant_email:         email,
     submitted_at:         new Date().toLocaleString('en-KE', { timeZone: 'Africa/Nairobi' }),
-    screenshot_base64:    f_screenshot.value || '',
-    screenshot_filename:  f_screenshotName.value || '',
   };
 
   try {
