@@ -128,21 +128,25 @@
     display: flex;
     justify-content: center;
     margin-top: 18px;
+    padding: 0 4px;
     animation: fadeDown 0.6s 0.05s ease both;
   }
   .typewriter-pill {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 480px;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 30px;
-    padding: 9px 18px;
+    border-radius: 18px;
+    padding: 10px 18px;
     box-shadow: var(--shadow-sm);
+    text-align: left;
   }
   .typewriter-dot {
     width: 7px; height: 7px;
+    margin-top: 6px;
     border-radius: 50%;
     background: var(--accent-2);
     flex-shrink: 0;
@@ -152,9 +156,9 @@
     font-size: 0.82rem;
     font-weight: 500;
     color: var(--ink-light);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: clip;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.5;
   }
   .typewriter-cursor {
     display: inline-block;
@@ -166,8 +170,8 @@
     animation: blink 0.85s steps(1) infinite;
   }
   @media (max-width: 480px) {
-    .typewriter-pill { padding: 8px 14px; }
-    .typewriter-text { font-size: 0.75rem; max-width: 68vw; }
+    .typewriter-pill { padding: 9px 14px; border-radius: 16px; }
+    .typewriter-text { font-size: 0.76rem; }
   }
 
   /* ============================================================
