@@ -9,9 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-  /* ============================================================
-     DESIGN TOKENS
-  ============================================================ */
   :root {
     --ink:        #0d1f1a;
     --ink-light:  #3a5248;
@@ -30,10 +27,6 @@
     --radius:     16px;
     --radius-sm:  10px;
   }
-
-  /* ============================================================
-     RESET & BASE
-  ============================================================ */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
@@ -43,10 +36,6 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
-
-  /* ============================================================
-     BACKGROUND MESH
-  ============================================================ */
   body::before {
     content: '';
     position: fixed;
@@ -57,10 +46,6 @@
     pointer-events: none;
     z-index: 0;
   }
-
-  /* ============================================================
-     LAYOUT
-  ============================================================ */
   .shell {
     position: relative;
     z-index: 1;
@@ -68,10 +53,6 @@
     margin: 0 auto;
     padding: 0 16px 120px;
   }
-
-  /* ============================================================
-     HEADER
-  ============================================================ */
   .header {
     padding: 40px 0 32px;
     text-align: center;
@@ -120,10 +101,6 @@
     margin: 0 auto;
     line-height: 1.6;
   }
-
-  /* ============================================================
-     TYPEWRITER STRIP
-  ============================================================ */
   .typewriter-wrap {
     display: flex;
     justify-content: center;
@@ -173,10 +150,6 @@
     .typewriter-pill { padding: 9px 14px; border-radius: 16px; }
     .typewriter-text { font-size: 0.76rem; }
   }
-
-  /* ============================================================
-     SEARCH CARD
-  ============================================================ */
   .search-card {
     background: var(--card);
     border-radius: var(--radius);
@@ -226,8 +199,6 @@
     background: #fff;
   }
   #searchInput::placeholder { color: #a0b8af; }
-
-  /* DROPDOWN */
   #resultsDropdown {
     display: none;
     position: absolute;
@@ -275,10 +246,6 @@
     color: var(--ink-light);
     font-size: 0.9rem;
   }
-
-  /* ============================================================
-     TENANT CARD
-  ============================================================ */
   #tenantCard {
     display: none;
     background: linear-gradient(135deg, var(--accent) 0%, #0f5c39 100%);
@@ -361,10 +328,6 @@
     z-index: 2;
   }
   .clear-btn:hover { background: rgba(255,255,255,0.3); }
-
-  /* ============================================================
-     FORM CARD
-  ============================================================ */
   .form-card {
     background: var(--card);
     border-radius: var(--radius);
@@ -422,13 +385,6 @@
     background: #fff;
   }
   .field textarea { min-height: 110px; }
-
-  /* ============================================================
-     APPRECIATION BANNER (replaces image upload)
-     A calm, animated thank-you card: a soft shine sweep passes
-     across it periodically, and short appreciation messages
-     crossfade in and out. A small heart icon gently pulses.
-  ============================================================ */
   .appreciation-box {
     position: relative;
     overflow: hidden;
@@ -487,8 +443,6 @@
     .appreciation-icon { width: 40px; height: 40px; }
     .appreciation-text { font-size: 0.85rem; }
   }
-
-  /* SUBMIT BTN */
   .submit-btn {
     width: 100%;
     padding: 16px;
@@ -535,10 +489,6 @@
   }
   .submit-btn.loading .btn-text { display: none; }
   .submit-btn.loading .btn-loader { display: block; }
-
-  /* ============================================================
-     SUBMIT-ONCE WARNING
-  ============================================================ */
   .submit-warning {
     display: flex;
     align-items: flex-start;
@@ -563,10 +513,6 @@
     line-height: 1.5;
   }
   .submit-warning strong { color: var(--warn); }
-
-  /* ============================================================
-     STATUS MESSAGES
-  ============================================================ */
   #statusMsg {
     display: none;
     border-radius: var(--radius-sm);
@@ -588,10 +534,6 @@
     border: 1px solid rgba(232,104,58,0.35);
     color: #b54420;
   }
-
-  /* ============================================================
-     CONFETTI SURPRISE
-  ============================================================ */
   .confetti-piece {
     position: fixed;
     top: -12px;
@@ -602,10 +544,6 @@
     animation-timing-function: cubic-bezier(0.4, 0.0, 0.6, 1);
     animation-fill-mode: forwards;
   }
-
-  /* ============================================================
-     INFO STRIP
-  ============================================================ */
   .info-strip {
     display: flex;
     gap: 10px;
@@ -633,10 +571,6 @@
     margin-top: 2px;
     letter-spacing: 0.3px;
   }
-
-  /* ============================================================
-     WHATSAPP FAB
-  ============================================================ */
   .wa-fab {
     position: fixed;
     bottom: 28px;
@@ -683,10 +617,6 @@
     border: 2px solid var(--surface);
     animation: pulse 1.8s ease infinite;
   }
-
-  /* ============================================================
-     PAYBILL FLOATING WIDGET
-  ============================================================ */
   .pay-fab {
     position: fixed;
     bottom: 28px;
@@ -723,7 +653,6 @@
     max-width: 140px;
     margin-left: 10px;
   }
-
   .pay-overlay {
     display: none;
     position: fixed;
@@ -821,10 +750,6 @@
     line-height: 1.6;
     margin-top: 6px;
   }
-
-  /* ============================================================
-     FOOTER
-  ============================================================ */
   .footer {
     text-align: center;
     padding: 16px 0;
@@ -833,10 +758,6 @@
     animation: fadeDown 0.6s 0.3s ease both;
   }
   .footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
-
-  /* ============================================================
-     ANIMATIONS
-  ============================================================ */
   @keyframes fadeDown {
     from { opacity: 0; transform: translateY(-14px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -892,10 +813,6 @@
     from { opacity: 1; transform: translateY(0); }
     to   { opacity: 0; transform: translateY(-6px); }
   }
-
-  /* ============================================================
-     MOBILE
-  ============================================================ */
   @media (max-width: 480px) {
     .tc-row { grid-template-columns: 1fr 1fr; }
     .tc-cell:last-child { grid-column: 1 / -1; }
@@ -904,9 +821,172 @@
     .pay-fab-label { display: none; }
     .pay-fab:hover { padding: 14px; }
   }
+
+  /* ============================================================
+     ACCESS GATE
+  ============================================================ */
+  html.locked, html.locked body {
+    overflow: hidden;
+    height: 100%;
+  }
+  #accessGate {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: var(--surface);
+  }
+  #accessGate::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 10% 0%, rgba(37,201,127,0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(26,122,82,0.12) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  #accessGate.hidden { display: none; }
+  .gate-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 380px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 34px 28px 30px;
+    text-align: center;
+    animation: cardReveal 0.35s ease both;
+  }
+  .gate-icon {
+    width: 54px; height: 54px;
+    margin: 0 auto 18px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 20px rgba(26,122,82,0.30);
+  }
+  .gate-icon svg { width: 26px; height: 26px; stroke: #fff; fill: none; stroke-width: 2; }
+  .gate-card h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .gate-card p {
+    font-size: 0.88rem;
+    color: var(--ink-light);
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+  #gateCodeInput {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-align: center;
+    color: var(--ink);
+    background: var(--surface);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  #gateCodeInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+    background: #fff;
+  }
+  #gateUnlockBtn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(26,122,82,0.30);
+  }
+  #gateUnlockBtn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(26,122,82,0.38); }
+  #gateUnlockBtn:active { transform: translateY(0); }
+  #gateError {
+    display: none;
+    margin-top: 14px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #b54420;
+    background: var(--warn-glow);
+    border: 1px solid rgba(232,104,58,0.30);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+  }
+  .gate-footer {
+    margin-top: 20px;
+    font-size: 0.78rem;
+    color: #a0b8af;
+  }
+  .gate-footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  #siteContent { display: none; }
+  #siteContent.revealed { display: block; }
 </style>
 </head>
 <body>
+
+<!-- ============================================================
+     ACCESS GATE
+     Simple client-side code gate. Change ACCESS_CODE in the
+     script below to whatever code you want tenants to use.
+     Note: since this is a static page with no server, the code
+     is visible in "view source" — this deters casual visitors
+     but is not strong security.
+============================================================ -->
+<div id="accessGate">
+  <div class="gate-card">
+    <div class="gate-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="10" width="16" height="10" rx="2"/>
+        <path d="M8 10V7a4 4 0 018 0v3"/>
+      </svg>
+    </div>
+    <h2>Baraka Plaza Portal</h2>
+    <p>Please enter your access code to continue.</p>
+    <form id="gateForm" novalidate>
+      <input
+        type="text"
+        id="gateCodeInput"
+        placeholder="ACCESS CODE"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        inputmode="text"
+      />
+      <button type="submit" id="gateUnlockBtn">Unlock</button>
+      <div id="gateError">Incorrect code. Please try again or contact the caretaker.</div>
+    </form>
+    <div class="gate-footer">
+      Don't have a code? &nbsp;
+      <a href="https://wa.me/254795665527?text=Hello%2C%20I%20need%20the%20access%20code%20for%20the%20tenant%20portal." target="_blank" rel="noopener">
+        Ask the caretaker on WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
+
+<div id="siteContent">
 
 <!-- ============================================================
      WHATSAPP FAB
@@ -1146,8 +1226,71 @@
 
 </div><!-- /shell -->
 
+</div><!-- /siteContent -->
+
 
 <script>
+/* ================================================================
+   ACCESS GATE LOGIC
+   Change ACCESS_CODE to whatever code you want tenants to use.
+   Once entered correctly, the code is remembered on that device
+   (localStorage) so tenants aren't asked again on future visits.
+================================================================ */
+const ACCESS_CODE = "BARAKA2026"; // <-- change this to your desired code
+const GATE_STORAGE_KEY = "barakaPortalAccessGranted";
+
+(function initGate() {
+  const gate = document.getElementById('accessGate');
+  const content = document.getElementById('siteContent');
+  const form = document.getElementById('gateForm');
+  const input = document.getElementById('gateCodeInput');
+  const errorBox = document.getElementById('gateError');
+
+  function unlock() {
+    document.documentElement.classList.remove('locked');
+    gate.classList.add('hidden');
+    content.classList.add('revealed');
+  }
+
+  function lock() {
+    document.documentElement.classList.add('locked');
+    gate.classList.remove('hidden');
+    content.classList.remove('revealed');
+  }
+
+  // Already unlocked on this device?
+  try {
+    if (localStorage.getItem(GATE_STORAGE_KEY) === 'true') {
+      unlock();
+      return;
+    }
+  } catch (e) {
+    // localStorage unavailable (e.g. private browsing) - fall through to normal gate
+  }
+
+  lock();
+  setTimeout(() => input.focus(), 350);
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const entered = input.value.trim();
+
+    if (entered.toUpperCase() === ACCESS_CODE.toUpperCase()) {
+      try { localStorage.setItem(GATE_STORAGE_KEY, 'true'); } catch (e) {}
+      errorBox.style.display = 'none';
+      unlock();
+    } else {
+      errorBox.style.display = 'block';
+      input.value = '';
+      input.focus();
+      const card = document.querySelector('.gate-card');
+      card.style.animation = 'none';
+      card.offsetHeight;
+      card.style.animation = 'cardReveal 0.25s ease both';
+    }
+  });
+})();
+
 /* ================================================================
    TENANT DATA
 ================================================================ */
