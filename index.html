@@ -944,6 +944,71 @@
   #siteContent.revealed { display: block; }
 
   /* ============================================================
+     TOUCH ID / FINGERPRINT UNLOCK (gate extras)
+  ============================================================ */
+  .gate-biometric-btn {
+    display: none;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    background: var(--card);
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    margin-bottom: 14px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .gate-biometric-btn:hover:not(:disabled) { background: var(--accent-glow); transform: translateY(-1px); }
+  .gate-biometric-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .gate-biometric-btn svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 1.7; flex-shrink: 0; }
+  #gateBiometricDivider {
+    display: none;
+    font-size: 0.76rem;
+    color: var(--ink-light);
+    text-align: center;
+    margin: -2px 0 14px;
+  }
+  .gate-biometric-setup {
+    display: none;
+    align-items: flex-start;
+    gap: 8px;
+    text-align: left;
+    font-size: 0.82rem;
+    color: var(--ink-light);
+    line-height: 1.4;
+    margin: 2px 0 10px;
+    cursor: pointer;
+  }
+  .gate-biometric-setup input[type="checkbox"] {
+    margin-top: 2px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .gate-biometric-info {
+    display: none;
+    text-align: left;
+    font-size: 0.76rem;
+    color: var(--ink-light);
+    line-height: 1.55;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-bottom: 14px;
+  }
+  .gate-biometric-info strong { color: var(--ink); }
+
+  /* ============================================================
      DARK MODE
      Overrides the CSS variables above when html[data-theme="dark"].
      Every color in this file is driven by variables, so most of
@@ -1071,6 +1136,16 @@
     </div>
     <h2>Baraka Plaza Portal</h2>
     <p>Please enter your access code to continue.</p>
+
+    <!-- Shown only on devices/browsers with Touch ID / fingerprint already set up -->
+    <button type="button" id="gateBiometricBtn" class="gate-biometric-btn">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3a5 5 0 00-5 5v1.2M12 3a5 5 0 015 5v1.2M7.5 9.5v2.7a4.5 4.5 0 009 0V9.5M4.5 9.5v2.7a7.5 7.5 0 0015 0V9.5M12 12.2v3.6M9.5 15.8a2.5 2.5 0 005 0"/>
+      </svg>
+      <span class="gate-bio-label">Unlock with Touch ID</span>
+    </button>
+    <div id="gateBiometricDivider">or enter your access code</div>
+
     <form id="gateForm" novalidate>
       <input
         type="text"
@@ -1081,6 +1156,16 @@
         spellcheck="false"
         inputmode="text"
       />
+
+      <!-- Shown only the first time, so tenants can opt in to Touch ID -->
+      <label id="gateBiometricSetup" class="gate-biometric-setup" for="gateBiometricCheckbox">
+        <input type="checkbox" id="gateBiometricCheckbox" checked />
+        <span>Set up Touch ID / fingerprint unlock on this device</span>
+      </label>
+      <div id="gateBiometricInfo" class="gate-biometric-info">
+        <strong>How it works:</strong> once you unlock with the code below, this device will ask you to confirm with its Touch ID or fingerprint sensor to save it. Next time, just tap "Unlock with Touch ID" instead of typing the code — nothing is uploaded, the credential stays on this device only. Websites can't choose which biometric method a device uses, so on devices with only Face ID (no fingerprint sensor) the OS may use Face ID here instead; if you'd rather avoid that, leave this box unchecked and keep using the code.
+      </div>
+
       <button type="submit" id="gateUnlockBtn">Unlock</button>
       <div id="gateError">Incorrect code. Please try again or contact the caretaker.</div>
     </form>
@@ -1368,10 +1453,97 @@
 })();
 
 /* ================================================================
+   TOUCH ID / FINGERPRINT UNLOCK (WebAuthn)
+   Optional convenience layer on top of the access code, using this
+   device's built-in platform authenticator (e.g. Touch ID on Mac,
+   Windows Hello fingerprint reader, Android fingerprint sensor).
+   The credential ID is stored only in this browser's localStorage —
+   nothing is sent anywhere, and there's no server involved.
+   Requires a secure context (https://) to work at all.
+   Note: a website cannot force the OS to use a fingerprint instead
+   of Face ID — that choice belongs to the device/OS. On a device
+   with only Face ID available, the OS may use Face ID here instead.
+================================================================ */
+const BIOMETRIC_CRED_KEY = 'barakaPortalBiometricCredId';
+
+function b64urlToBytes(b64url) {
+  const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+  const str = atob(b64);
+  return Uint8Array.from(str, c => c.charCodeAt(0));
+}
+function bytesToB64url(bytes) {
+  let str = '';
+  new Uint8Array(bytes).forEach(b => { str += String.fromCharCode(b); });
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function biometricAvailable() {
+  try {
+    if (!window.isSecureContext) return false;
+    if (!window.PublicKeyCredential || !PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) return false;
+    return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+  } catch (e) {
+    return false;
+  }
+}
+
+async function enableBiometricUnlock() {
+  try {
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+    const userId = crypto.getRandomValues(new Uint8Array(16));
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge,
+        rp: { name: 'Baraka Plaza Portal' },
+        user: { id: userId, name: 'tenant', displayName: 'Tenant' },
+        pubKeyCredParams: [
+          { type: 'public-key', alg: -7 },
+          { type: 'public-key', alg: -257 }
+        ],
+        authenticatorSelection: {
+          authenticatorAttachment: 'platform',
+          userVerification: 'required',
+          residentKey: 'preferred'
+        },
+        timeout: 60000,
+      }
+    });
+    if (cred && cred.rawId) {
+      localStorage.setItem(BIOMETRIC_CRED_KEY, bytesToB64url(cred.rawId));
+      return true;
+    }
+  } catch (e) {
+    console.warn('Touch ID setup skipped or failed:', e);
+  }
+  return false;
+}
+
+async function unlockWithBiometric() {
+  const storedId = localStorage.getItem(BIOMETRIC_CRED_KEY);
+  if (!storedId) return false;
+  try {
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge,
+        allowCredentials: [{ id: b64urlToBytes(storedId), type: 'public-key', transports: ['internal'] }],
+        userVerification: 'required',
+        timeout: 60000,
+      }
+    });
+    return !!assertion;
+  } catch (e) {
+    console.warn('Touch ID unlock cancelled or failed:', e);
+    return false;
+  }
+}
+
+/* ================================================================
    ACCESS GATE LOGIC
    Change ACCESS_CODE to whatever code you want tenants to use.
-   The code is asked every single time the page is loaded or
-   reloaded — it is intentionally NOT remembered between visits.
+   The code (or Touch ID, if set up) is asked every single time the
+   page is loaded or reloaded — it is intentionally NOT remembered
+   as "already unlocked" between visits.
 ================================================================ */
 const ACCESS_CODE = "BARAKA2026"; // <-- change this to your desired code
 
@@ -1381,6 +1553,12 @@ const ACCESS_CODE = "BARAKA2026"; // <-- change this to your desired code
   const form = document.getElementById('gateForm');
   const input = document.getElementById('gateCodeInput');
   const errorBox = document.getElementById('gateError');
+  const bioBtn = document.getElementById('gateBiometricBtn');
+  const bioLabel = bioBtn.querySelector('.gate-bio-label');
+  const bioDivider = document.getElementById('gateBiometricDivider');
+  const bioSetup = document.getElementById('gateBiometricSetup');
+  const bioCheckbox = document.getElementById('gateBiometricCheckbox');
+  const bioInfo = document.getElementById('gateBiometricInfo');
 
   function unlock() {
     document.documentElement.classList.remove('locked');
@@ -1394,18 +1572,57 @@ const ACCESS_CODE = "BARAKA2026"; // <-- change this to your desired code
     content.classList.remove('revealed');
   }
 
-  // Always start locked — the code is asked on every page load/reload.
+  // Always start locked — auth is asked on every page load/reload.
   lock();
-  setTimeout(() => input.focus(), 350);
 
-  form.addEventListener('submit', function (e) {
+  (async function setupBiometricUI() {
+    const available = await biometricAvailable();
+    if (!available) return; // no fingerprint/Touch ID hardware, or not https
+
+    const hasStoredCred = !!localStorage.getItem(BIOMETRIC_CRED_KEY);
+    if (hasStoredCred) {
+      bioBtn.style.display = 'flex';
+      bioDivider.style.display = 'block';
+      input.removeAttribute('autofocus');
+    } else {
+      bioSetup.style.display = 'flex';
+      bioInfo.style.display = 'block';
+      setTimeout(() => input.focus(), 350);
+    }
+  })();
+
+  // Fallback focus for browsers without biometrics.
+  setTimeout(() => { if (document.activeElement !== input) input.focus(); }, 400);
+
+  bioBtn.addEventListener('click', async () => {
+    bioBtn.disabled = true;
+    bioLabel.textContent = 'Confirming...';
+    const ok = await unlockWithBiometric();
+    bioBtn.disabled = false;
+    bioLabel.textContent = 'Unlock with Touch ID';
+    if (ok) {
+      errorBox.style.display = 'none';
+      unlock();
+    } else {
+      errorBox.textContent = "Couldn't confirm with Touch ID / fingerprint. Please enter your access code below.";
+      errorBox.style.display = 'block';
+      input.focus();
+    }
+  });
+
+  form.addEventListener('submit', async function (e) {
     e.preventDefault();
     const entered = input.value.trim();
 
     if (entered.toUpperCase() === ACCESS_CODE.toUpperCase()) {
       errorBox.style.display = 'none';
+
+      if (bioSetup.style.display !== 'none' && bioCheckbox.checked) {
+        await enableBiometricUnlock(); // best-effort; ignored if it fails or is dismissed
+      }
       unlock();
     } else {
+      errorBox.textContent = 'Incorrect code. Please try again or contact the caretaker.';
       errorBox.style.display = 'block';
       input.value = '';
       input.focus();
@@ -1477,7 +1694,7 @@ const TENANTS = [
   { houseNumber: "48", tenantName: "ALEX NGUTA", rentAmount: 6500 },
   { houseNumber: "49", tenantName: "VIVIVIAN SEEYIAN", rentAmount: 9000 },
   { houseNumber: "50", tenantName: "PENNINAH", rentAmount: 8000 },
-  { houseNumber: "51", tenantName: "MARVINE", rentAmount: 7500 },
+  { houseNumber: "51", tenantName: "marvine", rentAmount: 7500 },
   { houseNumber: "52", tenantName: "ESTHER MWATHI", rentAmount: 6500 },
   { houseNumber: "53", tenantName: "DUNCAN NYAKUNDI", rentAmount: 6500 },
   { houseNumber: "54", tenantName: "WILSON NDIRITU", rentAmount: 6500 },
