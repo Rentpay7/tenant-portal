@@ -196,7 +196,7 @@
   #searchInput:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 4px var(--accent-glow);
-    background: #fff;
+    background: var(--card);
   }
   #searchInput::placeholder { color: #a0b8af; }
   #resultsDropdown {
@@ -382,7 +382,7 @@
   .field input:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 4px var(--accent-glow);
-    background: #fff;
+    background: var(--card);
   }
   .field textarea { min-height: 110px; }
   .appreciation-box {
@@ -904,7 +904,7 @@
   #gateCodeInput:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 4px var(--accent-glow);
-    background: #fff;
+    background: var(--card);
   }
   #gateUnlockBtn {
     width: 100%;
@@ -942,9 +942,115 @@
   .gate-footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
   #siteContent { display: none; }
   #siteContent.revealed { display: block; }
+
+  /* ============================================================
+     DARK MODE
+     Overrides the CSS variables above when html[data-theme="dark"].
+     Every color in this file is driven by variables, so most of
+     the UI re-themes automatically.
+  ============================================================ */
+  html[data-theme="dark"] {
+    --ink:        #eaf3ee;
+    --ink-light:  #9db3a9;
+    --surface:    #0b1310;
+    --card:       #131f1a;
+    --accent:     #2fd98b;
+    --accent-2:   #57e6a4;
+    --accent-glow:rgba(47,217,139,0.22);
+    --warn:       #ff8f63;
+    --warn-glow:  rgba(255,143,99,0.14);
+    --wa:         #25d366;
+    --border:     #223229;
+    --shadow-sm:  0 2px 8px rgba(0,0,0,0.35);
+    --shadow-md:  0 6px 24px rgba(0,0,0,0.45);
+    --shadow-lg:  0 16px 48px rgba(0,0,0,0.55);
+  }
+  html[data-theme="dark"] body::before,
+  html[data-theme="dark"] #accessGate::before {
+    background:
+      radial-gradient(ellipse 70% 50% at 10% 0%, rgba(47,217,139,0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(47,217,139,0.08) 0%, transparent 55%);
+  }
+  html[data-theme="dark"] .appreciation-box {
+    background: linear-gradient(135deg, #10241a 0%, #0d1f17 100%);
+  }
+  html[data-theme="dark"] .appreciation-box::before {
+    background: linear-gradient(
+      100deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.10) 50%,
+      rgba(255,255,255,0) 100%
+    );
+  }
+  html[data-theme="dark"] #statusMsg.success {
+    background: rgba(47,217,139,0.14);
+    border: 1px solid rgba(47,217,139,0.4);
+    color: #7cf0b6;
+  }
+  html[data-theme="dark"] #statusMsg.error {
+    background: rgba(255,143,99,0.12);
+    border: 1px solid rgba(255,143,99,0.35);
+    color: #ffb28f;
+  }
+  html[data-theme="dark"] .submit-warning p { color: #ffb28f; }
+  html[data-theme="dark"] .footer,
+  html[data-theme="dark"] .gate-footer { color: #6f8a7d; }
+  html[data-theme="dark"] #searchInput::placeholder { color: #5f7a6e; }
+
+  /* ============================================================
+     THEME TOGGLE BUTTON
+  ============================================================ */
+  .theme-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 6000;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .theme-toggle:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .theme-toggle svg {
+    width: 20px; height: 20px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+    position: absolute;
+    transition: opacity 0.2s, transform 0.3s;
+  }
+  .theme-toggle .icon-sun  { opacity: 0; transform: scale(0.5) rotate(-40deg); }
+  .theme-toggle .icon-moon { opacity: 1; transform: scale(1) rotate(0deg); }
+  .theme-toggle.is-dark .icon-sun  { opacity: 1; transform: scale(1) rotate(0deg); }
+  .theme-toggle.is-dark .icon-moon { opacity: 0; transform: scale(0.5) rotate(40deg); }
+  @media (max-width: 480px) {
+    .theme-toggle { top: 12px; right: 12px; width: 40px; height: 40px; }
+  }
 </style>
 </head>
 <body>
+
+<!-- ============================================================
+     THEME TOGGLE
+     Sits above both the access gate and the site content so it
+     can be used regardless of lock state.
+============================================================ -->
+<button id="themeToggleBtn" class="theme-toggle" title="Toggle dark / light mode" aria-label="Toggle dark or light mode">
+  <svg class="icon-sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="4.5"/>
+    <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
+  </svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 14.5A8.5 8.5 0 019.5 4 8.5 8.5 0 1020 14.5z"/>
+  </svg>
+</button>
 
 <!-- ============================================================
      ACCESS GATE
@@ -952,7 +1058,8 @@
      script below to whatever code you want tenants to use.
      Note: since this is a static page with no server, the code
      is visible in "view source" — this deters casual visitors
-     but is not strong security.
+     but is not strong security. The code is asked on every page
+     load/reload (not remembered between visits).
 ============================================================ -->
 <div id="accessGate">
   <div class="gate-card">
@@ -1231,13 +1338,42 @@
 
 <script>
 /* ================================================================
+   THEME (DARK / LIGHT) LOGIC
+   Remembers the visitor's preference across visits using
+   localStorage (purely cosmetic, not a security control), and
+   falls back to the OS/browser color-scheme preference on first
+   visit.
+================================================================ */
+(function initTheme() {
+  const root = document.documentElement;
+  const btn  = document.getElementById('themeToggleBtn');
+  const STORAGE_KEY = 'barakaPortalTheme';
+
+  function apply(theme) {
+    root.setAttribute('data-theme', theme);
+    btn.classList.toggle('is-dark', theme === 'dark');
+  }
+
+  let saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  apply(saved === 'dark' || saved === 'light' ? saved : (prefersDark ? 'dark' : 'light'));
+
+  btn.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+  });
+})();
+
+/* ================================================================
    ACCESS GATE LOGIC
    Change ACCESS_CODE to whatever code you want tenants to use.
-   Once entered correctly, the code is remembered on that device
-   (localStorage) so tenants aren't asked again on future visits.
+   The code is asked every single time the page is loaded or
+   reloaded — it is intentionally NOT remembered between visits.
 ================================================================ */
 const ACCESS_CODE = "BARAKA2026"; // <-- change this to your desired code
-const GATE_STORAGE_KEY = "barakaPortalAccessGranted";
 
 (function initGate() {
   const gate = document.getElementById('accessGate');
@@ -1258,16 +1394,7 @@ const GATE_STORAGE_KEY = "barakaPortalAccessGranted";
     content.classList.remove('revealed');
   }
 
-  // Already unlocked on this device?
-  try {
-    if (localStorage.getItem(GATE_STORAGE_KEY) === 'true') {
-      unlock();
-      return;
-    }
-  } catch (e) {
-    // localStorage unavailable (e.g. private browsing) - fall through to normal gate
-  }
-
+  // Always start locked — the code is asked on every page load/reload.
   lock();
   setTimeout(() => input.focus(), 350);
 
@@ -1276,7 +1403,6 @@ const GATE_STORAGE_KEY = "barakaPortalAccessGranted";
     const entered = input.value.trim();
 
     if (entered.toUpperCase() === ACCESS_CODE.toUpperCase()) {
-      try { localStorage.setItem(GATE_STORAGE_KEY, 'true'); } catch (e) {}
       errorBox.style.display = 'none';
       unlock();
     } else {
