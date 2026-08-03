@@ -1098,6 +1098,99 @@
   @media (max-width: 480px) {
     .theme-toggle { top: 12px; right: 12px; width: 40px; height: 40px; }
   }
+
+  /* ============================================================
+     QUICK LINKS — Complaints & Vacate Notice
+     Two animated action cards linking out to the standalone
+     complaints and vacate-notice mini apps. Purely additive:
+     doesn't touch any existing selectors above.
+  ============================================================ */
+  .quick-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: fadeDown 0.6s 0.18s ease both;
+  }
+  .quick-link-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    text-decoration: none;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .quick-link-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -60%;
+    width: 55%; height: 100%;
+    background: linear-gradient(
+      100deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.5) 50%,
+      rgba(255,255,255,0) 100%
+    );
+    transform: skewX(-20deg);
+    animation: shineSweep 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .quick-link-card:nth-child(2)::before { animation-delay: 1.2s; }
+  .quick-link-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent);
+  }
+  .quick-link-card:active { transform: translateY(-1px); }
+  .quick-link-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(26,122,82,0.22);
+    transition: transform 0.3s ease;
+  }
+  .quick-link-card:hover .quick-link-icon { transform: scale(1.08) rotate(-4deg); }
+  .quick-link-icon.icon-complaint { background: linear-gradient(135deg, var(--warn) 0%, #f3925f 100%); }
+  .quick-link-icon.icon-vacate    { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); }
+  .quick-link-icon svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2; }
+  .quick-link-text { display: flex; flex-direction: column; gap: 2px; }
+  .quick-link-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--ink);
+  }
+  .quick-link-sub {
+    font-size: 0.74rem;
+    color: var(--ink-light);
+    line-height: 1.4;
+  }
+  .quick-link-arrow {
+    position: absolute;
+    top: 16px; right: 14px;
+    color: var(--ink-light);
+    opacity: 0.6;
+    transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease;
+  }
+  .quick-link-arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+  .quick-link-card:hover .quick-link-arrow {
+    transform: translate(2px, -2px);
+    opacity: 1;
+    color: var(--accent);
+  }
+  @media (max-width: 480px) {
+    .quick-links { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -1284,6 +1377,42 @@
       <div class="info-pill-num">Instant</div>
       <div class="info-pill-lbl">Email Delivery</div>
     </div>
+  </div>
+
+  <!-- ============================================================
+       QUICK LINKS — Complaints & Vacate Notice
+       Two animated cards linking out to the standalone apps.
+  ============================================================ -->
+  <div class="quick-links">
+    <a class="quick-link-card" href="https://complaints-coral.vercel.app/" target="_blank" rel="noopener" title="Submit a complaint or house issue">
+      <div class="quick-link-icon icon-complaint">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        </svg>
+      </div>
+      <div class="quick-link-text">
+        <span class="quick-link-title">Submit a Complaint</span>
+        <span class="quick-link-sub">Report an issue with your house</span>
+      </div>
+      <span class="quick-link-arrow">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </span>
+    </a>
+
+    <a class="quick-link-card" href="https://vacate-notice.vercel.app/" target="_blank" rel="noopener" title="Submit a vacate notice">
+      <div class="quick-link-icon icon-vacate">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3"/>
+        </svg>
+      </div>
+      <div class="quick-link-text">
+        <span class="quick-link-title">Send Vacate Notice</span>
+        <span class="quick-link-sub">Let us know you're moving out</span>
+      </div>
+      <span class="quick-link-arrow">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </span>
+    </a>
   </div>
 
   <!-- SEARCH CARD -->
