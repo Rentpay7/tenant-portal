@@ -11,12 +11,12 @@
 :root{
   --paper:#eef2f7; --card:#fff; --ink:#10243a; --soft:#5b6f85; --line:#d5dee9;
   --blue:#2b63f0; --blue-soft:rgba(43,99,240,.12); --brass1:#f6d98a; --brass2:#c9922e; --brass-ink:#4a3208;
-  --ok:#14a06b; --bad:#d6452d; --wa:#25d366; --r:18px;
+  --ok:#2b63f0; --bad:#d6452d; --wa:#25d366; --r:18px;
   --sh:0 10px 30px rgba(16,36,58,.09);
 }
 html[data-theme=dark]{
   --paper:#0a1522; --card:#112033; --ink:#e9f0f8; --soft:#8ea3b9; --line:#1f3249;
-  --blue:#6f98ff; --blue-soft:rgba(111,152,255,.16); --ok:#3ddc9a; --bad:#ff7d66; --sh:0 10px 30px rgba(0,0,0,.4);
+  --blue:#6f98ff; --blue-soft:rgba(111,152,255,.16); --ok:#6f98ff; --bad:#ff7d66; --sh:0 10px 30px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -103,10 +103,10 @@ textarea:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 4px var(--b
 @keyframes rp{to{transform:scale(1);opacity:0}}
 .send .ld{display:none;width:20px;height:20px;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;margin:auto;animation:spin .7s linear infinite}
 .send.loading .tx{display:none}.send.loading .ld{display:block}
-.send.sent{background:var(--ok);color:#fff}
+.send.sent{background:var(--blue);color:var(--paper)}
 @keyframes spin{to{transform:rotate(360deg)}}
 #msg{display:none;margin-top:14px;padding:14px 16px;border-radius:12px;font-weight:500;line-height:1.5;font-size:.92rem}
-#msg.success{background:rgba(20,160,107,.12);border:1px solid rgba(20,160,107,.4);color:var(--ok)}
+#msg.success{background:var(--blue-soft);border:1px solid var(--blue);color:var(--blue)}
 #msg.error{background:rgba(214,69,45,.1);border:1px solid rgba(214,69,45,.35);color:var(--bad)}
 .thanks{text-align:center;margin-top:16px;color:var(--soft);font-size:.86rem;min-height:1.4em;transition:opacity .45s,transform .45s}
 .thanks.out{opacity:0;transform:translateY(-6px)}
@@ -268,6 +268,8 @@ select{padding:7px 10px;border:2px solid var(--line);border-radius:10px;backgrou
             <textarea id="bank" placeholder="Paste the M-Pesa or bank confirmation here" required></textarea></div>
           <div class="f"><div class="mh"><label>Which month is this payment for?</label><select id="year" aria-label="Year"></select></div>
             <div class="months" id="months" role="radiogroup" aria-label="Payment month"></div></div>
+          <div class="f"><label for="extra">Additional note <small>(optional)</small></label>
+            <textarea id="extra" style="min-height:70px" placeholder="For example: includes a late fee, or part payment"></textarea></div>
         </div>
       </div>
 
@@ -437,7 +439,7 @@ document.querySelectorAll('.cp').forEach(b=>b.onclick=async()=>{
 function msg(type,text){const m=$('msg');m.className=type;m.textContent='';if(type==='success')m.insertAdjacentHTML('beforeend','<svg class="ck" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M7 12.5l3.5 3.5L17 9"/></svg>');m.append(text);m.style.display='block';m.scrollIntoView({behavior:'smooth',block:'nearest'})}
 function hideMsg(){const m=$('msg');m.style.display='none';m.className=''}
 function confetti(){
-  const C=['#2b63f0','#f6d98a','#c9922e','#14a06b','#ffffff','#6f98ff'];
+  const C=['#2b63f0','#f6d98a','#c9922e','#ffffff','#6f98ff'];
   for(let i=0;i<50;i++){const p=document.createElement('div');p.className='cf';const s=6+Math.random()*7,round=Math.random()>.5,d=2.4+Math.random()*1.6,dl=Math.random()*.3;
     Object.assign(p.style,{left:Math.random()*100+'vw',width:s+'px',height:(round?s:s*.5)+'px',background:C[i%C.length],borderRadius:round?'50%':'2px',animationDuration:d+'s',animationDelay:dl+'s'});
     document.body.appendChild(p);setTimeout(()=>p.remove(),(d+dl)*1000+200)}
@@ -460,7 +462,7 @@ $('form').addEventListener('submit',async e=>{
 
   const btn=$('sendBtn');btn.classList.add('loading');btn.disabled=true;
   const params={house_number:selected.houseNumber,tenant_name:selected.tenantName,rent_amount:selected.rentAmount,bank_message:bank,
-    notes:'Rent for '+month+' '+$('year').value,month:month,year:$('year').value,tenant_email:email,submitted_at:new Date().toLocaleString('en-KE',{timeZone:'Africa/Nairobi'})};
+    notes:'Rent for '+month+' '+$('year').value+($('extra').value.trim()?' | Note: '+$('extra').value.trim():''),extra_note:$('extra').value.trim()||'None',month:month,year:$('year').value,tenant_email:email,submitted_at:new Date().toLocaleString('en-KE',{timeZone:'Africa/Nairobi'})};
   try{
     const body=new URLSearchParams();Object.keys(params).forEach(k=>body.append(k,params[k]));
     const res=await fetch(SCRIPT_URL,{method:'POST',body});
