@@ -1,2242 +1,432 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BARAKA PLAZA – Tenant Payment Portal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Baraka Plaza – Tenant Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --ink:        #0d1f1a;
-    --ink-light:  #3a5248;
-    --surface:    #f5f7f5;
-    --card:       #ffffff;
-    --accent:     #1a7a52;
-    --accent-2:   #25c97f;
-    --accent-glow:rgba(37,201,127,0.18);
-    --warn:       #e8683a;
-    --warn-glow:  rgba(232,104,58,0.12);
-    --wa:         #25d366;
-    --border:     #d8e4de;
-    --shadow-sm:  0 2px 8px rgba(13,31,26,0.07);
-    --shadow-md:  0 6px 24px rgba(13,31,26,0.10);
-    --shadow-lg:  0 16px 48px rgba(13,31,26,0.13);
-    --radius:     16px;
-    --radius-sm:  10px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--surface);
-    color: var(--ink);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 70% 50% at 10% 0%, rgba(37,201,127,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(26,122,82,0.10) 0%, transparent 55%);
-    pointer-events: none;
-    z-index: 0;
-  }
-  .shell {
-    position: relative;
-    z-index: 1;
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 0 16px 120px;
-  }
-  .header {
-    padding: 40px 0 32px;
-    text-align: center;
-    animation: fadeDown 0.6s ease both;
-  }
-  .logo-mark {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 18px;
-  }
-  .logo-icon {
-    width: 42px; height: 42px;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(26,122,82,0.30);
-  }
-  .logo-icon svg { width: 22px; height: 22px; fill: #fff; }
-  .logo-text {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.5rem;
-    color: var(--ink);
-    letter-spacing: -0.5px;
-  }
-  .logo-text span { color: var(--accent); }
-  .header h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.6rem, 5vw, 2.4rem);
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -1px;
-    color: var(--ink);
-    margin-bottom: 10px;
-  }
-  .header h1 em {
-    font-style: normal;
-    color: var(--accent);
-  }
-  .header p {
-    font-size: 0.95rem;
-    color: var(--ink-light);
-    font-weight: 300;
-    max-width: 400px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-  .typewriter-wrap {
-    display: flex;
-    justify-content: center;
-    margin-top: 18px;
-    padding: 0 4px;
-    animation: fadeDown 0.6s 0.05s ease both;
-  }
-  .typewriter-pill {
-    display: inline-flex;
-    align-items: flex-start;
-    gap: 8px;
-    width: 100%;
-    max-width: 480px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 10px 18px;
-    box-shadow: var(--shadow-sm);
-    text-align: left;
-  }
-  .typewriter-dot {
-    width: 7px; height: 7px;
-    margin-top: 6px;
-    border-radius: 50%;
-    background: var(--accent-2);
-    flex-shrink: 0;
-    animation: pulse 1.6s ease infinite;
-  }
-  .typewriter-text {
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--ink-light);
-    white-space: normal;
-    word-break: break-word;
-    line-height: 1.5;
-  }
-  .typewriter-cursor {
-    display: inline-block;
-    width: 1px;
-    height: 0.9em;
-    background: var(--accent);
-    margin-left: 2px;
-    vertical-align: middle;
-    animation: blink 0.85s steps(1) infinite;
-  }
-  @media (max-width: 480px) {
-    .typewriter-pill { padding: 9px 14px; border-radius: 16px; }
-    .typewriter-text { font-size: 0.76rem; }
-  }
-  .search-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 28px 24px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border);
-    margin-bottom: 24px;
-    animation: fadeDown 0.6s 0.1s ease both;
-  }
-  .search-label {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.8rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 10px;
-    display: block;
-  }
-  .search-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  .search-icon {
-    position: absolute;
-    left: 14px;
-    color: var(--ink-light);
-    pointer-events: none;
-  }
-  .search-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 2; }
-  #searchInput {
-    width: 100%;
-    padding: 14px 14px 14px 44px;
-    border: 2px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1rem;
-    color: var(--ink);
-    background: var(--surface);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  #searchInput:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-glow);
-    background: var(--card);
-  }
-  #searchInput::placeholder { color: #a0b8af; }
-  #resultsDropdown {
-    display: none;
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0; right: 0;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-lg);
-    z-index: 100;
-    max-height: 240px;
-    overflow-y: auto;
-    animation: scaleIn 0.15s ease;
-  }
-  #resultsDropdown.open { display: block; }
-  .result-item {
-    padding: 12px 16px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s;
-  }
-  .result-item:last-child { border-bottom: none; }
-  .result-item:hover { background: var(--surface); }
-  .result-name {
-    font-weight: 500;
-    font-size: 0.95rem;
-    color: var(--ink);
-  }
-  .result-house {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 700;
-    background: var(--accent-glow);
-    color: var(--accent);
-    padding: 3px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.5px;
-  }
-  .no-result {
-    padding: 16px;
-    text-align: center;
-    color: var(--ink-light);
-    font-size: 0.9rem;
-  }
-  #tenantCard {
-    display: none;
-    background: linear-gradient(135deg, var(--accent) 0%, #0f5c39 100%);
-    border-radius: var(--radius);
-    padding: 26px 24px;
-    margin-bottom: 24px;
-    box-shadow: 0 8px 32px rgba(26,122,82,0.30);
-    color: #fff;
-    animation: fadeDown 0.4s ease both;
-    position: relative;
-    overflow: hidden;
-  }
-  #tenantCard::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 160px; height: 160px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-  }
-  #tenantCard::after {
-    content: '';
-    position: absolute;
-    bottom: -30px; left: 20px;
-    width: 100px; height: 100px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-  }
-  .tc-label {
-    font-size: 0.72rem;
-    font-family: 'Syne', sans-serif;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    opacity: 0.7;
-    margin-bottom: 4px;
-  }
-  .tc-value {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 1.15rem;
-    margin-bottom: 16px;
-  }
-  .tc-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    position: relative;
-    z-index: 1;
-  }
-  .tc-cell { display: flex; flex-direction: column; }
-  .tc-house {
-    font-family: 'Syne', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-  .tc-amount {
-    font-size: 1.5rem;
-    font-weight: 700;
-    font-family: 'Syne', sans-serif;
-  }
-  .tc-due {
-    font-size: 0.85rem;
-    font-weight: 300;
-    opacity: 0.8;
-  }
-  .clear-btn {
-    position: absolute;
-    top: 14px; right: 14px;
-    background: rgba(255,255,255,0.15);
-    border: none;
-    color: #fff;
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-    z-index: 2;
-  }
-  .clear-btn:hover { background: rgba(255,255,255,0.3); }
-  .form-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 28px 24px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border);
-    margin-bottom: 24px;
-    animation: fadeDown 0.6s 0.2s ease both;
-  }
-  .form-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.1rem;
-    margin-bottom: 22px;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .form-title-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--accent-2);
-  }
-  .field { margin-bottom: 18px; }
-  .field label {
-    display: block;
-    font-weight: 500;
-    font-size: 0.85rem;
-    color: var(--ink-light);
-    margin-bottom: 7px;
-    letter-spacing: 0.3px;
-  }
-  .field label span { color: var(--warn); margin-left: 2px; }
-  .field textarea,
-  .field input[type="text"],
-  .field input[type="email"] {
-    width: 100%;
-    padding: 13px 14px;
-    border: 2px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    color: var(--ink);
-    background: var(--surface);
-    outline: none;
-    resize: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    line-height: 1.5;
-  }
-  .field textarea:focus,
-  .field input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-glow);
-    background: var(--card);
-  }
-  .field textarea { min-height: 110px; }
-  .appreciation-box {
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--radius-sm);
-    background: linear-gradient(135deg, #eefaf3 0%, #e4f5ec 100%);
-    border: 1px solid var(--border);
-    padding: 22px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .appreciation-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -60%;
-    width: 55%; height: 100%;
-    background: linear-gradient(
-      100deg,
-      rgba(255,255,255,0) 0%,
-      rgba(255,255,255,0.55) 50%,
-      rgba(255,255,255,0) 100%
-    );
-    transform: skewX(-20deg);
-    animation: shineSweep 5s ease-in-out infinite;
-  }
-  .appreciation-icon {
-    flex-shrink: 0;
-    width: 46px; height: 46px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 14px rgba(26,122,82,0.25);
-    animation: heartBeat 2.4s ease-in-out infinite;
-    position: relative;
-    z-index: 1;
-  }
-  .appreciation-icon svg { width: 22px; height: 22px; fill: #fff; }
-  .appreciation-content {
-    position: relative;
-    z-index: 1;
-    flex: 1;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-  }
-  .appreciation-text {
-    font-size: 0.92rem;
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1.5;
-  }
-  .appreciation-text.fade-in { animation: fadeSlideIn 0.5s ease both; }
-  .appreciation-text.fade-out { animation: fadeSlideOut 0.5s ease both; }
-  @media (max-width: 480px) {
-    .appreciation-box { padding: 18px 16px; gap: 12px; }
-    .appreciation-icon { width: 40px; height: 40px; }
-    .appreciation-text { font-size: 0.85rem; }
-  }
-  .submit-btn {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
-    box-shadow: 0 4px 20px rgba(26,122,82,0.30);
-    position: relative;
-    overflow: hidden;
-  }
-  .submit-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0);
-    transition: background 0.15s;
-  }
-  .submit-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 28px rgba(26,122,82,0.38);
-  }
-  .submit-btn:hover:not(:disabled)::after { background: rgba(255,255,255,0.07); }
-  .submit-btn:active:not(:disabled) { transform: translateY(0); }
-  .submit-btn:disabled { opacity: 0.65; cursor: not-allowed; }
-  .submit-btn.submitted {
-    background: linear-gradient(135deg, #6b7d75 0%, #556358 100%);
-    box-shadow: none;
-  }
-  .btn-loader {
-    display: none;
-    width: 18px; height: 18px;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin: 0 auto;
-  }
-  .submit-btn.loading .btn-text { display: none; }
-  .submit-btn.loading .btn-loader { display: block; }
-  .submit-warning {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    background: var(--warn-glow);
-    border: 1px solid rgba(232,104,58,0.30);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    margin-bottom: 18px;
-  }
-  .submit-warning svg {
-    width: 18px; height: 18px;
-    stroke: var(--warn);
-    fill: none;
-    stroke-width: 2;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .submit-warning p {
-    font-size: 0.82rem;
-    color: #9a4423;
-    line-height: 1.5;
-  }
-  .submit-warning strong { color: var(--warn); }
-  #statusMsg {
-    display: none;
-    border-radius: var(--radius-sm);
-    padding: 14px 18px;
-    font-size: 0.92rem;
-    font-weight: 500;
-    margin-top: 14px;
-    line-height: 1.5;
-    position: relative;
-    overflow: hidden;
-  }
-  #statusMsg.success {
-    background: rgba(37,201,127,0.12);
-    border: 1px solid rgba(37,201,127,0.4);
-    color: #0f6b3a;
-  }
-  #statusMsg.error {
-    background: rgba(232,104,58,0.10);
-    border: 1px solid rgba(232,104,58,0.35);
-    color: #b54420;
-  }
-  .confetti-piece {
-    position: fixed;
-    top: -12px;
-    z-index: 2000;
-    border-radius: 2px;
-    pointer-events: none;
-    animation-name: confettiFall;
-    animation-timing-function: cubic-bezier(0.4, 0.0, 0.6, 1);
-    animation-fill-mode: forwards;
-  }
-  .info-strip {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 24px;
-    animation: fadeDown 0.6s 0.15s ease both;
-  }
-  .info-pill {
-    flex: 1;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 14px 12px;
-    text-align: center;
-    box-shadow: var(--shadow-sm);
-  }
-  .info-pill-num {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.3rem;
-    color: var(--accent);
-  }
-  .info-pill-lbl {
-    font-size: 0.72rem;
-    color: var(--ink-light);
-    margin-top: 2px;
-    letter-spacing: 0.3px;
-  }
-  .wa-fab {
-    position: fixed;
-    bottom: 28px;
-    right: 24px;
-    z-index: 999;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0;
-    background: var(--wa);
-    color: #fff;
-    border-radius: 50px;
-    box-shadow: 0 6px 24px rgba(37,211,102,0.40);
-    padding: 14px;
-    transition: padding 0.25s ease, border-radius 0.25s ease, box-shadow 0.25s;
-    overflow: hidden;
-    animation: popIn 0.5s 0.8s ease both;
-  }
-  .wa-fab:hover {
-    padding: 14px 20px;
-    box-shadow: 0 10px 32px rgba(37,211,102,0.52);
-  }
-  .wa-fab svg { width: 26px; height: 26px; fill: #fff; flex-shrink: 0; }
-  .wa-fab-label {
-    max-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    transition: max-width 0.3s ease, margin-left 0.3s;
-    margin-left: 0;
-  }
-  .wa-fab:hover .wa-fab-label {
-    max-width: 160px;
-    margin-left: 10px;
-  }
-  .wa-fab-badge {
-    position: absolute;
-    top: -3px; right: -3px;
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: var(--warn);
-    border: 2px solid var(--surface);
-    animation: pulse 1.8s ease infinite;
-  }
-  .pay-fab {
-    position: fixed;
-    bottom: 28px;
-    left: 24px;
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    box-shadow: 0 6px 24px rgba(26,122,82,0.40);
-    padding: 14px;
-    cursor: pointer;
-    transition: padding 0.25s ease, box-shadow 0.25s;
-    animation: popIn 0.5s 0.9s ease both;
-  }
-  .pay-fab:hover {
-    padding: 14px 20px;
-    box-shadow: 0 10px 32px rgba(26,122,82,0.5);
-  }
-  .pay-fab svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2; flex-shrink: 0; }
-  .pay-fab-label {
-    max-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    transition: max-width 0.3s ease, margin-left 0.3s;
-    margin-left: 0;
-  }
-  .pay-fab:hover .pay-fab-label {
-    max-width: 140px;
-    margin-left: 10px;
-  }
-  .pay-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(13,31,26,0.45);
-    backdrop-filter: blur(2px);
-    z-index: 1000;
-    align-items: flex-end;
-    justify-content: center;
-    animation: fadeDown 0.2s ease both;
-  }
-  .pay-overlay.open { display: flex; }
-  .pay-card {
-    width: 100%;
-    max-width: 420px;
-    background: var(--card);
-    border-radius: 22px 22px 0 0;
-    padding: 28px 24px 32px;
-    box-shadow: 0 -8px 40px rgba(13,31,26,0.25);
-    animation: slideUp 0.3s ease both;
-  }
-  @media (min-width: 480px) {
-    .pay-overlay { align-items: center; }
-    .pay-card { border-radius: var(--radius); animation: cardReveal 0.25s ease both; }
-  }
-  .pay-card-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
-  .pay-card-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.15rem;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .pay-close {
-    background: var(--surface);
-    border: none;
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    color: var(--ink-light);
-    font-size: 1.1rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-  }
-  .pay-close:hover { background: var(--border); }
-  .pay-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 14px 16px;
-    margin-bottom: 12px;
-  }
-  .pay-row-info { display: flex; flex-direction: column; gap: 2px; }
-  .pay-row-lbl {
-    font-size: 0.72rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--ink-light);
-  }
-  .pay-row-val {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.2rem;
-    color: var(--ink);
-    letter-spacing: 0.5px;
-  }
-  .pay-copy-btn {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    font-family: 'Syne', sans-serif;
-    cursor: pointer;
-    transition: background 0.2s;
-    flex-shrink: 0;
-  }
-  .pay-copy-btn:hover { background: #145f41; }
-  .pay-copy-btn.copied { background: var(--accent-2); }
-  .pay-note {
-    font-size: 0.82rem;
-    color: var(--ink-light);
-    line-height: 1.6;
-    margin-top: 6px;
-  }
-  .footer {
-    text-align: center;
-    padding: 16px 0;
-    font-size: 0.78rem;
-    color: #a0b8af;
-    animation: fadeDown 0.6s 0.3s ease both;
-  }
-  .footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes scaleIn {
-    from { opacity: 0; transform: scaleY(0.92); transform-origin: top; }
-    to   { opacity: 1; transform: scaleY(1); }
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  @keyframes popIn {
-    from { opacity: 0; transform: scale(0.5); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-  @keyframes cardReveal {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.5; transform: scale(1.15); }
-  }
-  @keyframes blink {
-    0%, 49%  { opacity: 1; }
-    50%, 100%{ opacity: 0; }
-  }
-  @keyframes confettiFall {
-    from { transform: translateY(0) rotate(0deg); opacity: 1; }
-    to   { transform: translateY(100vh) rotate(600deg); opacity: 0; }
-  }
-  @keyframes shineSweep {
-    0%   { left: -60%; }
-    45%  { left: 130%; }
-    100% { left: 130%; }
-  }
-  @keyframes heartBeat {
-    0%, 100% { transform: scale(1); }
-    15%      { transform: scale(1.15); }
-    30%      { transform: scale(1); }
-    45%      { transform: scale(1.1); }
-    60%      { transform: scale(1); }
-  }
-  @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeSlideOut {
-    from { opacity: 1; transform: translateY(0); }
-    to   { opacity: 0; transform: translateY(-6px); }
-  }
-  @media (max-width: 480px) {
-    .tc-row { grid-template-columns: 1fr 1fr; }
-    .tc-cell:last-child { grid-column: 1 / -1; }
-    .info-strip { flex-wrap: wrap; }
-    .info-pill { min-width: calc(50% - 5px); flex: none; }
-    .pay-fab-label { display: none; }
-    .pay-fab:hover { padding: 14px; }
-  }
-
-  /* ============================================================
-     ACCESS GATE
-  ============================================================ */
-  html.locked, html.locked body {
-    overflow: hidden;
-    height: 100%;
-  }
-  #accessGate {
-    position: fixed;
-    inset: 0;
-    z-index: 5000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: var(--surface);
-  }
-  #accessGate::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 70% 50% at 10% 0%, rgba(37,201,127,0.14) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(26,122,82,0.12) 0%, transparent 55%);
-    pointer-events: none;
-  }
-  #accessGate.hidden { display: none; }
-  .gate-card {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 380px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-lg);
-    padding: 34px 28px 30px;
-    text-align: center;
-    animation: cardReveal 0.35s ease both;
-  }
-  .gate-icon {
-    width: 54px; height: 54px;
-    margin: 0 auto 18px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 6px 20px rgba(26,122,82,0.30);
-  }
-  .gate-icon svg { width: 26px; height: 26px; stroke: #fff; fill: none; stroke-width: 2; }
-  .gate-card h2 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.3rem;
-    color: var(--ink);
-    margin-bottom: 6px;
-    letter-spacing: -0.5px;
-  }
-  .gate-card p {
-    font-size: 0.88rem;
-    color: var(--ink-light);
-    margin-bottom: 22px;
-    line-height: 1.5;
-  }
-  #gateCodeInput {
-    width: 100%;
-    padding: 14px 16px;
-    border: 2px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 3px;
-    text-align: center;
-    color: var(--ink);
-    background: var(--surface);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-  }
-  #gateCodeInput:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px var(--accent-glow);
-    background: var(--card);
-  }
-  #gateUnlockBtn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.2s;
-    box-shadow: 0 4px 20px rgba(26,122,82,0.30);
-  }
-  #gateUnlockBtn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(26,122,82,0.38); }
-  #gateUnlockBtn:active { transform: translateY(0); }
-  #gateError {
-    display: none;
-    margin-top: 14px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: #b54420;
-    background: var(--warn-glow);
-    border: 1px solid rgba(232,104,58,0.30);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-  }
-  .gate-footer {
-    margin-top: 20px;
-    font-size: 0.78rem;
-    color: #a0b8af;
-  }
-  .gate-footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
-  #siteContent { display: none; }
-  #siteContent.revealed { display: block; }
-
-  /* ============================================================
-     TOUCH ID / FINGERPRINT UNLOCK (gate extras)
-  ============================================================ */
-  .gate-biometric-btn {
-    display: none;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 14px;
-    background: var(--card);
-    border: 2px solid var(--accent);
-    color: var(--accent);
-    border-radius: var(--radius-sm);
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.92rem;
-    letter-spacing: 0.2px;
-    cursor: pointer;
-    margin-bottom: 14px;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .gate-biometric-btn:hover:not(:disabled) { background: var(--accent-glow); transform: translateY(-1px); }
-  .gate-biometric-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .gate-biometric-btn svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 1.7; flex-shrink: 0; }
-  #gateBiometricDivider {
-    display: none;
-    font-size: 0.76rem;
-    color: var(--ink-light);
-    text-align: center;
-    margin: -2px 0 14px;
-  }
-  .gate-biometric-setup {
-    display: none;
-    align-items: flex-start;
-    gap: 8px;
-    text-align: left;
-    font-size: 0.82rem;
-    color: var(--ink-light);
-    line-height: 1.4;
-    margin: 2px 0 10px;
-    cursor: pointer;
-  }
-  .gate-biometric-setup input[type="checkbox"] {
-    margin-top: 2px;
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    accent-color: var(--accent);
-    cursor: pointer;
-  }
-  .gate-biometric-info {
-    display: none;
-    text-align: left;
-    font-size: 0.76rem;
-    color: var(--ink-light);
-    line-height: 1.55;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
-    margin-bottom: 14px;
-  }
-  .gate-biometric-info strong { color: var(--ink); }
-
-  /* ============================================================
-     DARK MODE
-     Overrides the CSS variables above when html[data-theme="dark"].
-     Every color in this file is driven by variables, so most of
-     the UI re-themes automatically.
-  ============================================================ */
-  html[data-theme="dark"] {
-    --ink:        #eaf3ee;
-    --ink-light:  #9db3a9;
-    --surface:    #0b1310;
-    --card:       #131f1a;
-    --accent:     #2fd98b;
-    --accent-2:   #57e6a4;
-    --accent-glow:rgba(47,217,139,0.22);
-    --warn:       #ff8f63;
-    --warn-glow:  rgba(255,143,99,0.14);
-    --wa:         #25d366;
-    --border:     #223229;
-    --shadow-sm:  0 2px 8px rgba(0,0,0,0.35);
-    --shadow-md:  0 6px 24px rgba(0,0,0,0.45);
-    --shadow-lg:  0 16px 48px rgba(0,0,0,0.55);
-  }
-  html[data-theme="dark"] body::before,
-  html[data-theme="dark"] #accessGate::before {
-    background:
-      radial-gradient(ellipse 70% 50% at 10% 0%, rgba(47,217,139,0.10) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(47,217,139,0.08) 0%, transparent 55%);
-  }
-  html[data-theme="dark"] .appreciation-box {
-    background: linear-gradient(135deg, #10241a 0%, #0d1f17 100%);
-  }
-  html[data-theme="dark"] .appreciation-box::before {
-    background: linear-gradient(
-      100deg,
-      rgba(255,255,255,0) 0%,
-      rgba(255,255,255,0.10) 50%,
-      rgba(255,255,255,0) 100%
-    );
-  }
-  html[data-theme="dark"] #statusMsg.success {
-    background: rgba(47,217,139,0.14);
-    border: 1px solid rgba(47,217,139,0.4);
-    color: #7cf0b6;
-  }
-  html[data-theme="dark"] #statusMsg.error {
-    background: rgba(255,143,99,0.12);
-    border: 1px solid rgba(255,143,99,0.35);
-    color: #ffb28f;
-  }
-  html[data-theme="dark"] .submit-warning p { color: #ffb28f; }
-  html[data-theme="dark"] .footer,
-  html[data-theme="dark"] .gate-footer { color: #6f8a7d; }
-  html[data-theme="dark"] #searchInput::placeholder { color: #5f7a6e; }
-
-  /* ============================================================
-     THEME TOGGLE BUTTON
-  ============================================================ */
-  .theme-toggle {
-    position: fixed;
-    top: 18px;
-    right: 18px;
-    z-index: 6000;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: var(--card);
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.2s;
-  }
-  .theme-toggle:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
-  .theme-toggle svg {
-    width: 20px; height: 20px;
-    stroke: var(--accent);
-    fill: none;
-    stroke-width: 2;
-    position: absolute;
-    transition: opacity 0.2s, transform 0.3s;
-  }
-  .theme-toggle .icon-sun  { opacity: 0; transform: scale(0.5) rotate(-40deg); }
-  .theme-toggle .icon-moon { opacity: 1; transform: scale(1) rotate(0deg); }
-  .theme-toggle.is-dark .icon-sun  { opacity: 1; transform: scale(1) rotate(0deg); }
-  .theme-toggle.is-dark .icon-moon { opacity: 0; transform: scale(0.5) rotate(40deg); }
-  @media (max-width: 480px) {
-    .theme-toggle { top: 12px; right: 12px; width: 40px; height: 40px; }
-  }
-
-  /* ============================================================
-     QUICK LINKS — Complaints & Vacate Notice
-     Two animated action cards linking out to the standalone
-     complaints and vacate-notice mini apps. Purely additive:
-     doesn't touch any existing selectors above.
-  ============================================================ */
-  .quick-links {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 24px;
-    animation: fadeDown 0.6s 0.18s ease both;
-  }
-  .quick-link-card {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    text-decoration: none;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 16px;
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  }
-  .quick-link-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -60%;
-    width: 55%; height: 100%;
-    background: linear-gradient(
-      100deg,
-      rgba(255,255,255,0) 0%,
-      rgba(255,255,255,0.5) 50%,
-      rgba(255,255,255,0) 100%
-    );
-    transform: skewX(-20deg);
-    animation: shineSweep 6s ease-in-out infinite;
-    pointer-events: none;
-  }
-  .quick-link-card:nth-child(2)::before { animation-delay: 1.2s; }
-  .quick-link-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--accent);
-  }
-  .quick-link-card:active { transform: translateY(-1px); }
-  .quick-link-icon {
-    width: 42px; height: 42px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 4px 14px rgba(26,122,82,0.22);
-    transition: transform 0.3s ease;
-  }
-  .quick-link-card:hover .quick-link-icon { transform: scale(1.08) rotate(-4deg); }
-  .quick-link-icon.icon-complaint { background: linear-gradient(135deg, var(--warn) 0%, #f3925f 100%); }
-  .quick-link-icon.icon-vacate    { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); }
-  .quick-link-icon svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2; }
-  .quick-link-text { display: flex; flex-direction: column; gap: 2px; }
-  .quick-link-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.92rem;
-    color: var(--ink);
-  }
-  .quick-link-sub {
-    font-size: 0.74rem;
-    color: var(--ink-light);
-    line-height: 1.4;
-  }
-  .quick-link-arrow {
-    position: absolute;
-    top: 16px; right: 14px;
-    color: var(--ink-light);
-    opacity: 0.6;
-    transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease;
-  }
-  .quick-link-arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
-  .quick-link-card:hover .quick-link-arrow {
-    transform: translate(2px, -2px);
-    opacity: 1;
-    color: var(--accent);
-  }
-  @media (max-width: 480px) {
-    .quick-links { grid-template-columns: 1fr; }
-  }
+:root{
+  --paper:#eef2f7; --card:#fff; --ink:#10243a; --soft:#5b6f85; --line:#d5dee9;
+  --blue:#2b63f0; --blue-soft:rgba(43,99,240,.12); --brass1:#f6d98a; --brass2:#c9922e; --brass-ink:#4a3208;
+  --ok:#14a06b; --bad:#d6452d; --wa:#25d366; --r:18px;
+  --sh:0 10px 30px rgba(16,36,58,.09);
+}
+html[data-theme=dark]{
+  --paper:#0a1522; --card:#112033; --ink:#e9f0f8; --soft:#8ea3b9; --line:#1f3249;
+  --blue:#6f98ff; --blue-soft:rgba(111,152,255,.16); --ok:#3ddc9a; --bad:#ff7d66; --sh:0 10px 30px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+html.locked,html.locked body{overflow:hidden;height:100%}
+body{font-family:'Figtree',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* drifting background shapes */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg i{position:absolute;border-radius:40% 60% 55% 45%;filter:blur(70px);opacity:.5;animation:drift 22s ease-in-out infinite alternate}
+.bg i:nth-child(1){width:46vmax;height:46vmax;background:#9db9ff;top:-18vmax;left:-12vmax}
+.bg i:nth-child(2){width:38vmax;height:38vmax;background:#ffd88a;bottom:-16vmax;right:-10vmax;animation-delay:-8s}
+html[data-theme=dark] .bg i{opacity:.16}
+@keyframes drift{to{transform:translate(6vmax,4vmax) rotate(40deg) scale(1.1)}}
+.shell{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:28px 18px 130px}
+/* top */
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:34px}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:9px}
+.brand b{width:30px;height:30px;border-radius:9px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:.95rem}
+.theme{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);cursor:pointer;display:grid;place-items:center;position:fixed;top:22px;right:18px;z-index:6000;box-shadow:var(--sh)}
+.theme svg{width:19px;height:19px;stroke:var(--ink);fill:none;stroke-width:2;grid-area:1/1;transition:.3s}
+.theme .sun{opacity:0;transform:rotate(-60deg) scale(.5)}
+.theme.dark .sun{opacity:1;transform:none}.theme.dark .moon{opacity:0;transform:rotate(60deg) scale(.5)}
+/* hero */
+h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(2.2rem,8vw,3.3rem);line-height:1.02;letter-spacing:-.03em;max-width:11ch}
+.lead{color:var(--soft);margin:14px 0 14px;max-width:44ch;line-height:1.55}
+.hint{min-height:1.6em;font-size:.88rem;font-weight:500;color:var(--blue)}
+.hint::after{content:'';display:inline-block;width:2px;height:1em;background:var(--blue);margin-left:2px;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* quick links */
+.links{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 38px}
+.chip{display:inline-flex;align-items:center;gap:9px;padding:10px 16px;border:1px solid var(--line);border-radius:99px;background:var(--card);text-decoration:none;color:var(--ink);font-weight:600;font-size:.88rem;transition:.2s}
+.chip:hover{border-color:var(--blue);transform:translateY(-2px)}
+.chip svg{width:17px;height:17px;stroke:var(--blue);fill:none;stroke-width:2}
+/* steps rail */
+.steps{position:relative;padding-left:58px}
+.rail{position:absolute;left:19px;top:20px;bottom:20px;width:2px;background:var(--line);border-radius:2px}
+.rail i{display:block;width:100%;height:0;background:var(--blue);border-radius:2px;transition:height .6s cubic-bezier(.3,.8,.3,1)}
+.step{position:relative;margin-bottom:34px}
+.node{position:absolute;left:-58px;top:0;width:40px;height:40px;border-radius:50%;background:var(--card);border:2px solid var(--line);display:grid;place-items:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;transition:.35s}
+.node svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:3;stroke-dasharray:24;stroke-dashoffset:24;grid-area:1/1;transition:stroke-dashoffset .5s .15s}
+.node span{grid-area:1/1;transition:.2s}
+.step.done .node{background:var(--blue);border-color:var(--blue)}
+.step.done .node svg{stroke-dashoffset:0}.step.done .node span{opacity:0}
+.step h2{font-family:'Bricolage Grotesque',sans-serif;font-size:1.35rem;letter-spacing:-.02em;line-height:40px;margin-bottom:12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+/* search */
+.sw{position:relative}
+#q{width:100%;padding:15px 16px;border:2px solid var(--line);border-radius:12px;background:var(--paper);outline:none;font-size:1rem;transition:.2s}
+#q:focus{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-soft)}
+#dd{display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);max-height:250px;overflow:auto;z-index:50}
+#dd.open{display:block;animation:rise .18s both}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;border-bottom:1px solid var(--line)}
+.opt:last-child{border:0}.opt:hover,.opt:focus{background:var(--blue-soft);outline:none}
+.opt em{font-style:normal;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:.8rem;padding:3px 10px;border-radius:99px;background:var(--blue-soft);color:var(--blue)}
+.none{padding:16px;text-align:center;color:var(--soft);font-size:.9rem}
+/* door plate: the signature element */
+.plate{display:none;margin-top:16px;align-items:center;gap:16px;perspective:600px}
+.plate.show{display:flex}
+.tag{min-width:96px;padding:12px 16px;border-radius:14px;text-align:center;background:linear-gradient(145deg,var(--brass1),var(--brass2));color:var(--brass-ink);font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:2.4rem;line-height:1;letter-spacing:-.03em;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -3px 0 rgba(0,0,0,.15),0 8px 18px rgba(201,146,46,.35);position:relative}
+.tag::before,.tag::after{content:'';position:absolute;top:50%;width:6px;height:6px;border-radius:50%;background:rgba(74,50,8,.45);transform:translateY(-50%)}
+.tag::before{left:6px}.tag::after{right:6px}
+.tag.flip{animation:flip .7s cubic-bezier(.3,1.3,.5,1)}
+@keyframes flip{0%{transform:rotateX(-90deg);opacity:0}100%{transform:none;opacity:1}}
+.who{min-width:0;flex:1}.who b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;overflow-wrap:anywhere}
+.who span{color:var(--soft);font-size:.9rem}.who strong{color:var(--ink)}
+.clr{border:0;background:var(--paper);width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--soft)}
+/* fields */
+.f{margin-bottom:14px}.f:last-child{margin:0}
+label{display:block;font-weight:600;font-size:.88rem;margin-bottom:7px}
+label small{color:var(--soft);font-weight:400}
+textarea,input[type=email],input[type=text]{width:100%;padding:13px 14px;border:2px solid var(--line);border-radius:12px;background:var(--paper);outline:none;resize:vertical;line-height:1.5;transition:.2s}
+textarea{min-height:110px}
+textarea:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-soft)}
+.warn{display:flex;gap:10px;padding:12px 14px;border-radius:12px;background:rgba(214,69,45,.09);border:1px solid rgba(214,69,45,.28);font-size:.84rem;line-height:1.5;margin-bottom:14px}
+.warn svg{width:18px;height:18px;flex:none;stroke:var(--bad);fill:none;stroke-width:2;margin-top:1px}
+/* send */
+.send{position:relative;width:100%;padding:17px;border:0;border-radius:14px;background:var(--ink);color:var(--paper);font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;overflow:hidden;transition:transform .15s,opacity .2s}
+.send:hover:not(:disabled){transform:translateY(-2px)}
+.send:disabled{opacity:.45;cursor:not-allowed}
+.send .rp{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);transform:scale(0);animation:rp .6s ease-out forwards;pointer-events:none}
+@keyframes rp{to{transform:scale(1);opacity:0}}
+.send .ld{display:none;width:20px;height:20px;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;margin:auto;animation:spin .7s linear infinite}
+.send.loading .tx{display:none}.send.loading .ld{display:block}
+.send.sent{background:var(--ok);color:#fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+#msg{display:none;margin-top:14px;padding:14px 16px;border-radius:12px;font-weight:500;line-height:1.5;font-size:.92rem}
+#msg.success{background:rgba(20,160,107,.12);border:1px solid rgba(20,160,107,.4);color:var(--ok)}
+#msg.error{background:rgba(214,69,45,.1);border:1px solid rgba(214,69,45,.35);color:var(--bad)}
+.thanks{text-align:center;margin-top:16px;color:var(--soft);font-size:.86rem;min-height:1.4em;transition:opacity .45s,transform .45s}
+.thanks.out{opacity:0;transform:translateY(-6px)}
+/* floating actions */
+.fab{position:fixed;bottom:22px;z-index:900;display:flex;align-items:center;gap:0;border:0;border-radius:99px;padding:14px;color:#fff;cursor:pointer;text-decoration:none;box-shadow:0 8px 24px rgba(16,36,58,.28);transition:padding .25s;animation:rise .5s .6s both}
+.fab:hover{padding:14px 20px}.fab svg{width:24px;height:24px;flex:none}
+.fab span{max-width:0;overflow:hidden;white-space:nowrap;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:.9rem;transition:.3s}
+.fab:hover span{max-width:150px;margin-left:10px}
+.fab.pay{left:18px;background:var(--blue)}.fab.pay svg{stroke:#fff;fill:none;stroke-width:2}
+.fab.wa{right:18px;background:var(--wa)}.fab.wa svg{fill:#fff}
+html[data-theme=dark] .fab.pay{background:#3b64d8}
+@media(max-width:480px){.fab span{display:none}.fab:hover{padding:14px}}
+/* pay sheet */
+.ov{display:none;position:fixed;inset:0;background:rgba(10,21,34,.55);backdrop-filter:blur(3px);z-index:3000;align-items:flex-end;justify-content:center}
+.ov.open{display:flex}
+.sheet{width:100%;max-width:430px;background:var(--card);border-radius:24px 24px 0 0;padding:24px 22px 30px;animation:up .32s cubic-bezier(.2,.8,.2,1) both}
+@media(min-width:480px){.ov{align-items:center}.sheet{border-radius:var(--r)}}
+@keyframes up{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.sh-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.2rem}
+.pr{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.pr small{display:block;color:var(--soft);font-size:.78rem;margin-bottom:2px}
+.pr b{font-family:'Bricolage Grotesque',sans-serif;font-size:1.15rem;overflow-wrap:anywhere}
+.cp{border:0;background:var(--blue);color:#fff;padding:8px 14px;border-radius:9px;font-weight:600;cursor:pointer;flex:none}
+.cp.ok{background:var(--ok)}
+.note{font-size:.84rem;color:var(--soft);line-height:1.6;margin-top:6px}.note strong{color:var(--ink)}
+/* gate */
+#gate{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--paper)}
+#gate.hidden{display:none}
+.gc{width:100%;max-width:370px;background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--sh);padding:32px 26px 26px;animation:rise .5s both}
+.gc .tag{display:inline-block;font-size:1.3rem;min-width:0;padding:10px 20px;margin-bottom:18px}
+.gc h2{font-family:'Bricolage Grotesque',sans-serif;font-size:1.5rem;letter-spacing:-.02em;margin-bottom:6px}
+.gc p{color:var(--soft);font-size:.9rem;margin-bottom:20px}
+#code{text-align:center;letter-spacing:4px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-bottom:12px}
+#gerr{display:none;margin-top:12px;font-size:.84rem;color:var(--bad);font-weight:500}
+.bio{display:none;width:100%;margin-bottom:12px;padding:13px;border-radius:12px;border:2px solid var(--blue);background:transparent;color:var(--blue);font-weight:600;cursor:pointer}
+.bsetup{display:none;gap:8px;align-items:flex-start;text-align:left;font-size:.82rem;color:var(--soft);margin:0 0 12px;font-weight:400;cursor:pointer}
+.bsetup input{margin-top:2px;accent-color:var(--blue)}
+.gf{margin-top:18px;font-size:.82rem;color:var(--soft)}.gf a,.foot a{color:var(--blue);font-weight:600;text-decoration:none}
+#site{display:none}#site.on{display:block}
+.foot{text-align:center;font-size:.82rem;color:var(--soft);line-height:2;margin-top:10px}
+.cf{position:fixed;top:-12px;z-index:2000;pointer-events:none;animation:cf linear forwards}
+@keyframes cf{to{transform:translateY(105vh) rotate(640deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
+<div class="bg"><i></i><i></i></div>
 
-<!-- ============================================================
-     THEME TOGGLE
-     Sits above both the access gate and the site content so it
-     can be used regardless of lock state.
-============================================================ -->
-<button id="themeToggleBtn" class="theme-toggle" title="Toggle dark / light mode" aria-label="Toggle dark or light mode">
-  <svg class="icon-sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="4.5"/>
-    <path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/>
-  </svg>
-  <svg class="icon-moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 14.5A8.5 8.5 0 019.5 4 8.5 8.5 0 1020 14.5z"/>
-  </svg>
+<button id="themeBtn" class="theme" aria-label="Toggle dark or light mode">
+  <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+  <svg class="moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 019.5 4 8.5 8.5 0 1020 14.5z"/></svg>
 </button>
 
-<!-- ============================================================
-     ACCESS GATE
-     Simple client-side code gate. Change ACCESS_CODE in the
-     script below to whatever code you want tenants to use.
-     Note: since this is a static page with no server, the code
-     is visible in "view source" — this deters casual visitors
-     but is not strong security. The code is asked on every page
-     load/reload (not remembered between visits).
-============================================================ -->
-<div id="accessGate">
-  <div class="gate-card">
-    <div class="gate-icon">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="10" width="16" height="10" rx="2"/>
-        <path d="M8 10V7a4 4 0 018 0v3"/>
-      </svg>
-    </div>
-    <h2>Baraka Plaza Portal</h2>
-    <p>Please enter your access code to continue.</p>
-
-    <!-- Shown only on devices/browsers with Touch ID / fingerprint already set up -->
-    <button type="button" id="gateBiometricBtn" class="gate-biometric-btn">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 3a5 5 0 00-5 5v1.2M12 3a5 5 0 015 5v1.2M7.5 9.5v2.7a4.5 4.5 0 009 0V9.5M4.5 9.5v2.7a7.5 7.5 0 0015 0V9.5M12 12.2v3.6M9.5 15.8a2.5 2.5 0 005 0"/>
-      </svg>
-      <span class="gate-bio-label">Unlock with Touch ID</span>
-    </button>
-    <div id="gateBiometricDivider">or enter your access code</div>
-
+<div id="gate">
+  <div class="gc">
+    <div class="tag">BP</div>
+    <h2>Baraka Plaza</h2>
+    <p>Enter your access code to open the tenant portal.</p>
+    <button type="button" id="bioBtn" class="bio">Unlock with Touch ID</button>
     <form id="gateForm" novalidate>
-      <input
-        type="text"
-        id="gateCodeInput"
-        placeholder="ACCESS CODE"
-        autocomplete="off"
-        autocapitalize="characters"
-        spellcheck="false"
-        inputmode="text"
-      />
-
-      <!-- Shown only the first time, so tenants can opt in to Touch ID -->
-      <label id="gateBiometricSetup" class="gate-biometric-setup" for="gateBiometricCheckbox">
-        <input type="checkbox" id="gateBiometricCheckbox" checked />
-        <span>Set up Touch ID / fingerprint unlock on this device</span>
-      </label>
-      <div id="gateBiometricInfo" class="gate-biometric-info">
-        <strong>How it works:</strong> once you unlock with the code below, this device will ask you to confirm with its Touch ID or fingerprint sensor to save it. Next time, just tap "Unlock with Touch ID" instead of typing the code — nothing is uploaded, the credential stays on this device only. Websites can't choose which biometric method a device uses, so on devices with only Face ID (no fingerprint sensor) the OS may use Face ID here instead; if you'd rather avoid that, leave this box unchecked and keep using the code.
-      </div>
-
-      <button type="submit" id="gateUnlockBtn">Unlock</button>
-      <div id="gateError">Incorrect code. Please try again or contact the caretaker.</div>
+      <input type="text" id="code" placeholder="Access code" autocomplete="off" autocapitalize="characters" spellcheck="false"/>
+      <label id="bioSetup" class="bsetup" for="bioChk"><input type="checkbox" id="bioChk" checked/><span>Use Touch ID or fingerprint to unlock on this device next time. The credential stays on this device only.</span></label>
+      <button type="submit" class="send">Unlock</button>
+      <div id="gerr">Wrong code. Try again or ask the caretaker.</div>
     </form>
-    <div class="gate-footer">
-      Don't have a code? &nbsp;
-      <a href="https://wa.me/254795665527?text=Hello%2C%20I%20need%20the%20access%20code%20for%20the%20tenant%20portal." target="_blank" rel="noopener">
-        Ask the caretaker on WhatsApp
-      </a>
-    </div>
+    <div class="gf">No code? <a href="https://wa.me/254795665527?text=Hello%2C%20I%20need%20the%20access%20code%20for%20the%20tenant%20portal." target="_blank" rel="noopener">Ask the caretaker on WhatsApp</a></div>
   </div>
 </div>
 
-<div id="siteContent">
-
-<!-- ============================================================
-     WHATSAPP FAB
-     TODO: Replace +254795665527 with your actual WhatsApp number
-     Simplified prompt text: tenants tap this icon for any house issue
-============================================================ -->
-<a class="wa-fab"
-   href="https://wa.me/254795665527?text=Hello%2C%20I%20have%20an%20issue%20with%20my%20house."
-   target="_blank"
-   rel="noopener"
-   title="Contact caretaker on WhatsApp for any house issues"
-   style="position:fixed;">
-  <span class="wa-fab-badge"></span>
-  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-    <path d="M16 2.933C8.796 2.933 2.933 8.796 2.933 16c0 2.324.627 4.502 1.72 6.38L2.4 29.067l6.88-1.213A13.02 13.02 0 0016 29.067c7.204 0 13.067-5.863 13.067-13.067S23.204 2.933 16 2.933zm6.476 18.107c-.267.747-1.333 1.387-2.147 1.52-.587.093-1.36.16-3.947-.813-3.307-1.227-5.44-4.587-5.6-4.8-.16-.213-1.28-1.707-1.28-3.253 0-1.547.8-2.307 1.093-2.613.267-.28.587-.347.787-.347.2 0 .4.003.573.01.187.007.44-.07.693.533.267.627.907 2.16.987 2.32.08.16.133.347.027.56-.107.213-.16.347-.32.533-.16.187-.333.413-.48.56-.16.16-.32.333-.133.64.187.307.827 1.36 1.773 2.2 1.213 1.08 2.24 1.413 2.56 1.573.32.16.507.133.693-.08.187-.213.8-.933 1.013-1.253.213-.32.427-.267.72-.16.293.107 1.867.88 2.187 1.04.32.16.533.24.613.373.08.133.08.747-.187 1.493z"/>
-  </svg>
-  <span class="wa-fab-label">Chat Caretaker</span>
+<div id="site">
+<a class="fab wa" href="https://wa.me/254795665527?text=Hello%2C%20I%20have%20an%20issue%20with%20my%20house." target="_blank" rel="noopener" title="Message the caretaker">
+  <svg viewBox="0 0 32 32"><path d="M16 2.9C8.8 2.9 2.9 8.8 2.9 16c0 2.3.6 4.5 1.7 6.4L2.4 29l6.9-1.2A13 13 0 0016 29.1c7.2 0 13.1-5.9 13.1-13.1S23.200 2.900 16 2.900zm6.500 18.100c-.3.700-1.300 1.400-2.100 1.500-.6.100-1.400.2-3.900-.8-3.300-1.200-5.400-4.600-5.600-4.800-.2-.2-1.300-1.700-1.300-3.300 0-1.500.8-2.300 1.100-2.600.3-.3.600-.3.800-.3h.6c.2 0 .4-.1.700.5.3.6.9 2.200 1 2.300.1.200.1.300 0 .6-.1.200-.2.300-.3.500-.2.200-.3.400-.5.600-.2.200-.3.300-.1.600.2.300.8 1.400 1.800 2.200 1.200 1.100 2.200 1.400 2.600 1.600.3.200.5.100.7-.1.200-.2.800-.9 1-1.300.2-.3.400-.3.700-.2.300.1 1.900.9 2.200 1 .3.200.5.200.6.400.1.100.1.700-.2 1.500z"/></svg>
+  <span>Chat caretaker</span>
 </a>
-
-<!-- ============================================================
-     PAYBILL FLOATING WIDGET
-     TODO: Replace the paybill and account number below with your real details
-============================================================ -->
-<button class="pay-fab" id="payFabBtn" title="How to pay rent">
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-  </svg>
-  <span class="pay-fab-label">How to Pay</span>
+<button class="fab pay" id="payBtn" title="How to pay rent">
+  <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+  <span>How to pay</span>
 </button>
-
-<div class="pay-overlay" id="payOverlay">
-  <div class="pay-card">
-    <div class="pay-card-head">
-      <div class="pay-card-title">💳 How to Pay Rent</div>
-      <button class="pay-close" id="payCloseBtn" aria-label="Close">✕</button>
-    </div>
-
-    <div class="pay-row">
-      <div class="pay-row-info">
-        <span class="pay-row-lbl">Paybill Number</span>
-        <span class="pay-row-val" id="paybillNum">522533</span>
-      </div>
-      <button class="pay-copy-btn" data-copy-target="paybillNum">Copy</button>
-    </div>
-
-    <div class="pay-row">
-      <div class="pay-row-info">
-        <span class="pay-row-lbl">Account Number</span>
-        <span class="pay-row-val" id="accountNum">7805043 #HOUSE N0</span>
-      </div>
-      <button class="pay-copy-btn" data-copy-target="accountNum">Copy</button>
-    </div>
-
-    <p class="pay-note">
-      Go to <strong>M-Pesa &rarr; Lipa na M-Pesa &rarr; Pay Bill</strong>, enter the Paybill number,
-      use the account number <strong>and #house number</strong> as the Account Number, then enter the amount and PIN to confirm.
-      Once paid, come back here and submit your payment proof below.
-    </p>
+<div class="ov" id="ov">
+  <div class="sheet" role="dialog" aria-label="How to pay rent">
+    <div class="sh-h">How to pay rent <button class="clr" id="payClose" aria-label="Close">✕</button></div>
+    <div class="pr"><div><small>Paybill number</small><b id="pb">522533</b></div><button class="cp" data-c="pb">Copy</button></div>
+    <div class="pr"><div><small>Account number</small><b id="ac">7805043 #HOUSE N0</b></div><button class="cp" data-c="ac">Copy</button></div>
+    <p class="note">On M-Pesa, go to <strong>Lipa na M-Pesa, then Pay Bill</strong>. Enter the Paybill number, then use the account number <strong>and your #house number</strong> as the Account Number. Add the amount and your PIN. When it's paid, come back and send your proof.</p>
   </div>
 </div>
-
 
 <div class="shell">
+  <div class="top"><div class="brand"><b>B</b>Baraka Plaza</div></div>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="logo-mark">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
-          <path d="M9 21V12h6v9" fill="rgba(255,255,255,0.5)"/>
-        </svg>
-      </div>
-      <span class="logo-text">BARAKA PLAZA<span>RENT</span></span>
+  <section class="hero">
+    <h1>Paid your rent? Send us the proof.</h1>
+    <p class="lead">Find your house, paste the M-Pesa or bank message, and the caretaker gets it straight away.</p>
+    <div class="hint" id="hint"></div>
+    <div class="links">
+      <a class="chip" href="https://complaints-coral.vercel.app/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>Report a problem</a>
+      <a class="chip" href="https://vacate-notice.vercel.app/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3"/></svg>Give vacate notice</a>
     </div>
-    <h1>Submit Your <em>Rent Payment</em> Proof</h1>
-    <p>Search for your house, confirm your details, and forward your bank message  directly to the caretaker.</p>
+  </section>
 
-    <!-- ============================================================
-         TYPEWRITER STRIP
-         Rotates short helper messages, including a simplified prompt
-         to contact the caretaker via WhatsApp for house issues.
-    ============================================================ -->
-    <div class="typewriter-wrap">
-      <div class="typewriter-pill">
-        <span class="typewriter-dot"></span>
-        <span class="typewriter-text" id="typewriterText"></span><span class="typewriter-cursor"></span>
-      </div>
-    </div>
-  </header>
+  <div class="steps" id="steps">
+    <div class="rail"><i id="fill"></i></div>
 
-  <!-- INFO PILLS -->
-  <div class="info-strip">
-    <div class="info-pill">
-      <div class="info-pill-num" id="totalUnits">108</div>
-      <div class="info-pill-lbl">Total Units</div>
-    </div>
-    <div class="info-pill">
-      <div class="info-pill-num">24/7</div>
-      <div class="info-pill-lbl">Portal Access</div>
-    </div>
-    <div class="info-pill">
-      <div class="info-pill-num">Instant</div>
-      <div class="info-pill-lbl">Email Delivery</div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       QUICK LINKS — Complaints & Vacate Notice
-       Two animated cards linking out to the standalone apps.
-  ============================================================ -->
-  <div class="quick-links">
-    <a class="quick-link-card" href="https://complaints-coral.vercel.app/" target="_blank" rel="noopener" title="Submit a complaint or house issue">
-      <div class="quick-link-icon icon-complaint">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-        </svg>
-      </div>
-      <div class="quick-link-text">
-        <span class="quick-link-title">Submit a Complaint</span>
-        <span class="quick-link-sub">Report an issue with your house</span>
-      </div>
-      <span class="quick-link-arrow">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M9 7h8v8"/></svg>
-      </span>
-    </a>
-
-    <a class="quick-link-card" href="https://vacate-notice.vercel.app/" target="_blank" rel="noopener" title="Submit a vacate notice">
-      <div class="quick-link-icon icon-vacate">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3"/>
-        </svg>
-      </div>
-      <div class="quick-link-text">
-        <span class="quick-link-title">Send Vacate Notice</span>
-        <span class="quick-link-sub">Let us know you're moving out</span>
-      </div>
-      <span class="quick-link-arrow">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M9 7h8v8"/></svg>
-      </span>
-    </a>
-  </div>
-
-  <!-- SEARCH CARD -->
-  <div class="search-card">
-    <span class="search-label">Find Your House</span>
-    <div class="search-wrap" id="searchWrap">
-      <div class="search-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </div>
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Type house number or tenant name..."
-        autocomplete="off"
-        aria-label="Search house number or tenant name"
-      />
-      <div id="resultsDropdown" role="listbox" aria-label="Search results"></div>
-    </div>
-  </div>
-
-  <!-- TENANT DETAIL CARD (hidden until selected) -->
-  <div id="tenantCard" role="region" aria-label="Tenant details">
-    <button class="clear-btn" id="clearBtn" title="Clear selection" aria-label="Clear selection">x</button>
-    <div class="tc-row">
-      <div class="tc-cell">
-        <div class="tc-label">House No.</div>
-        <div class="tc-house" id="tc-house">--</div>
-      </div>
-      <div class="tc-cell">
-        <div class="tc-label">Tenant Name</div>
-        <div class="tc-value" id="tc-name">--</div>
-      </div>
-      <div class="tc-cell">
-        <div class="tc-label">Monthly Rent</div>
-        <div class="tc-amount" id="tc-rent">--</div>
-        <div class="tc-due" id="tc-due">Due 1st of month</div>
+    <div class="step" id="s1">
+      <div class="node"><span>1</span><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.500"/></svg></div>
+      <h2>Find your house</h2>
+      <div class="panel">
+        <div class="sw" id="sw">
+          <input type="text" id="q" placeholder="House number or your name" autocomplete="off" aria-label="Search house number or tenant name"/>
+          <div id="dd" role="listbox"></div>
+        </div>
+        <div class="plate" id="plate">
+          <div class="tag" id="tHouse">-</div>
+          <div class="who"><b id="tName">-</b><span>Rent <strong id="tRent">-</strong> due on the 1st</span></div>
+          <button class="clr" id="clr" aria-label="Clear selection">✕</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- FORM CARD -->
-  <div class="form-card">
-    <div class="form-title">
-      <div class="form-title-dot"></div>
-      Payment Proof Submission
-    </div>
-
-    <form id="paymentForm" novalidate>
-      <!-- Hidden fields populated from tenant selection -->
-      <input type="hidden" id="f-house" name="house_number" />
-      <input type="hidden" id="f-name"  name="tenant_name" />
-      <input type="hidden" id="f-rent"  name="rent_amount" />
-
-      <div class="field">
-        <label for="f-bankMsg">Bank Payment Message <span>*</span></label>
-        <textarea
-          id="f-bankMsg"
-          name="bank_message"
-          placeholder="Paste your M-Pesa / bank SMS confirmation here...&#10;&#10;e.g. Confirmed.  8,000 sent to LANDLORD NAME on 1/7/2026..."
-          required
-          aria-required="true"
-        ></textarea>
-      </div>
-
-      <!-- ============================================================
-           APPRECIATION BANNER (replaces the old screenshot upload)
-           A calm animated thank-you message for tenants.
-      ============================================================ -->
-      <div class="field">
-        <div class="appreciation-box">
-          <div class="appreciation-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 21s-6.7-4.35-9.3-8.28C1.02 10.1 1.6 6.9 4.2 5.3c2.2-1.35 4.9-.8 6.4 1.1.5.63.9 1.3 1.4 1.9.5-.6.9-1.27 1.4-1.9 1.5-1.9 4.2-2.45 6.4-1.1 2.6 1.6 3.18 4.8 1.5 7.42C18.7 16.65 12 21 12 21z"/>
-            </svg>
-          </div>
-          <div class="appreciation-content">
-            <span class="appreciation-text fade-in" id="appreciationText"></span>
-          </div>
+    <form id="form" novalidate>
+      <div class="step" id="s2">
+        <div class="node"><span>2</span><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.500"/></svg></div>
+        <h2>Paste your payment message</h2>
+        <div class="panel">
+          <div class="f"><label for="bank">Payment SMS</label>
+            <textarea id="bank" placeholder="Paste the M-Pesa or bank confirmation here" required></textarea></div>
+          <div class="f"><label for="notes">Note for the caretaker <small>(optional)</small></label>
+            <textarea id="notes" style="min-height:70px" placeholder="For example: July rent, includes a late fee"></textarea></div>
         </div>
       </div>
 
-      <div class="field">
-        <label for="f-notes">Additional Notes (optional)</label>
-        <textarea
-          id="f-notes"
-          name="notes"
-          placeholder="e.g. Paid for July 2026. Includes late fee of  500..."
-          style="min-height:70px;"
-          aria-label="Additional notes"
-        ></textarea>
+      <div class="step" id="s3">
+        <div class="node"><span>3</span><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.500"/></svg></div>
+        <h2>Send it</h2>
+        <div class="panel">
+          <div class="f"><label for="email">Your email, for a confirmation copy</label>
+            <input type="email" id="email" placeholder="you@email.com" required/></div>
+          <div class="warn"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+            <p><strong>Send once only.</strong> Duplicates slow down checking. No confirmation? Check your email or message the caretaker before sending again.</p></div>
+          <button type="submit" class="send" id="sendBtn" disabled><span class="tx">Send proof to caretaker</span><span class="ld"></span></button>
+          <div id="msg" role="alert" aria-live="polite"></div>
+          <div class="thanks" id="thanks"></div>
+        </div>
       </div>
-
-      <div class="field">
-        <label for="f-email">Your Email (for confirmation copy) <span>*</span></label>
-        <input
-          type="email"
-          id="f-email"
-          name="tenant_email"
-          placeholder="yourname@email.com"
-          required
-          aria-required="true"
-        />
-      </div>
-
-      <!-- SUBMIT-ONCE WARNING -->
-      <div class="submit-warning">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-        </svg>
-        <p><strong>Please submit only once.</strong> Duplicate submissions can delay verification. If you don't see a confirmation, check your email or contact the caretaker on WhatsApp before resubmitting.</p>
-      </div>
-
-      <button type="submit" class="submit-btn" id="submitBtn" disabled>
-        <span class="btn-text">Send Payment Proof to Caretaker</span>
-        <div class="btn-loader"></div>
-      </button>
-
-      <div id="statusMsg" role="alert" aria-live="polite"></div>
     </form>
   </div>
 
-  <footer class="footer">
-    Having trouble? &nbsp;
-    <a href="https://wa.me/254795665527" target="_blank" rel="noopener">
-      Contact the Caretaker directly on WhatsApp
-    </a>
-    <br/><br/>
-    Baraka Plaza Tenant Portal &mdash; Secure &amp; Private
-  </footer>
-
-</div><!-- /shell -->
-
-</div><!-- /siteContent -->
-
+  <div class="foot">Trouble sending? <a href="https://wa.me/254795665527" target="_blank" rel="noopener">Message the caretaker on WhatsApp</a><br/>Baraka Plaza Tenant Portal</div>
+</div>
+</div>
 
 <script>
-/* ================================================================
-   THEME (DARK / LIGHT) LOGIC
-   Remembers the visitor's preference across visits using
-   localStorage (purely cosmetic, not a security control), and
-   falls back to the OS/browser color-scheme preference on first
-   visit.
-================================================================ */
-(function initTheme() {
-  const root = document.documentElement;
-  const btn  = document.getElementById('themeToggleBtn');
-  const STORAGE_KEY = 'barakaPortalTheme';
-
-  function apply(theme) {
-    root.setAttribute('data-theme', theme);
-    btn.classList.toggle('is-dark', theme === 'dark');
-  }
-
-  let saved = null;
-  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
-
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  apply(saved === 'dark' || saved === 'light' ? saved : (prefersDark ? 'dark' : 'light'));
-
-  btn.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    apply(next);
-    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
-  });
+/* ---------- theme ---------- */
+(function(){
+  const r=document.documentElement,b=document.getElementById('themeBtn'),K='barakaPortalTheme';
+  const set=t=>{r.setAttribute('data-theme',t);b.classList.toggle('dark',t==='dark')};
+  let s=null;try{s=localStorage.getItem(K)}catch(e){}
+  set(s||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+  b.onclick=()=>{const n=r.getAttribute('data-theme')==='dark'?'light':'dark';set(n);try{localStorage.setItem(K,n)}catch(e){}};
 })();
 
-/* ================================================================
-   TOUCH ID / FINGERPRINT UNLOCK (WebAuthn)
-   Optional convenience layer on top of the access code, using this
-   device's built-in platform authenticator (e.g. Touch ID on Mac,
-   Windows Hello fingerprint reader, Android fingerprint sensor).
-   The credential ID is stored only in this browser's localStorage —
-   nothing is sent anywhere, and there's no server involved.
-   Requires a secure context (https://) to work at all.
-   Note: a website cannot force the OS to use a fingerprint instead
-   of Face ID — that choice belongs to the device/OS. On a device
-   with only Face ID available, the OS may use Face ID here instead.
-================================================================ */
-const BIOMETRIC_CRED_KEY = 'barakaPortalBiometricCredId';
+/* ---------- touch id (webauthn) ---------- */
+const BK='barakaPortalBiometricCredId';
+const toB64=b=>{let s='';new Uint8Array(b).forEach(x=>s+=String.fromCharCode(x));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const fromB64=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+async function bioOK(){try{return window.isSecureContext&&!!window.PublicKeyCredential&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()}catch(e){return false}}
+async function bioEnable(){try{
+  const c=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:'Baraka Plaza Portal'},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:'tenant',displayName:'Tenant'},pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'preferred'},timeout:60000}});
+  if(c&&c.rawId)localStorage.setItem(BK,toB64(c.rawId));}catch(e){}}
+async function bioUnlock(){const id=localStorage.getItem(BK);if(!id)return false;try{
+  return !!await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{id:fromB64(id),type:'public-key',transports:['internal']}],userVerification:'required',timeout:60000}});}catch(e){return false}}
 
-function b64urlToBytes(b64url) {
-  const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
-  const str = atob(b64);
-  return Uint8Array.from(str, c => c.charCodeAt(0));
-}
-function bytesToB64url(bytes) {
-  let str = '';
-  new Uint8Array(bytes).forEach(b => { str += String.fromCharCode(b); });
-  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-async function biometricAvailable() {
-  try {
-    if (!window.isSecureContext) return false;
-    if (!window.PublicKeyCredential || !PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) return false;
-    return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-  } catch (e) {
-    return false;
-  }
-}
-
-async function enableBiometricUnlock() {
-  try {
-    const challenge = crypto.getRandomValues(new Uint8Array(32));
-    const userId = crypto.getRandomValues(new Uint8Array(16));
-    const cred = await navigator.credentials.create({
-      publicKey: {
-        challenge,
-        rp: { name: 'Baraka Plaza Portal' },
-        user: { id: userId, name: 'tenant', displayName: 'Tenant' },
-        pubKeyCredParams: [
-          { type: 'public-key', alg: -7 },
-          { type: 'public-key', alg: -257 }
-        ],
-        authenticatorSelection: {
-          authenticatorAttachment: 'platform',
-          userVerification: 'required',
-          residentKey: 'preferred'
-        },
-        timeout: 60000,
-      }
-    });
-    if (cred && cred.rawId) {
-      localStorage.setItem(BIOMETRIC_CRED_KEY, bytesToB64url(cred.rawId));
-      return true;
-    }
-  } catch (e) {
-    console.warn('Touch ID setup skipped or failed:', e);
-  }
-  return false;
-}
-
-async function unlockWithBiometric() {
-  const storedId = localStorage.getItem(BIOMETRIC_CRED_KEY);
-  if (!storedId) return false;
-  try {
-    const challenge = crypto.getRandomValues(new Uint8Array(32));
-    const assertion = await navigator.credentials.get({
-      publicKey: {
-        challenge,
-        allowCredentials: [{ id: b64urlToBytes(storedId), type: 'public-key', transports: ['internal'] }],
-        userVerification: 'required',
-        timeout: 60000,
-      }
-    });
-    return !!assertion;
-  } catch (e) {
-    console.warn('Touch ID unlock cancelled or failed:', e);
-    return false;
-  }
-}
-
-/* ================================================================
-   ACCESS GATE LOGIC
-   Change ACCESS_CODE to whatever code you want tenants to use.
-   The code (or Touch ID, if set up) is asked every single time the
-   page is loaded or reloaded — it is intentionally NOT remembered
-   as "already unlocked" between visits.
-================================================================ */
-const ACCESS_CODE = "BARAKA2026"; // <-- change this to your desired code
-
-(function initGate() {
-  const gate = document.getElementById('accessGate');
-  const content = document.getElementById('siteContent');
-  const form = document.getElementById('gateForm');
-  const input = document.getElementById('gateCodeInput');
-  const errorBox = document.getElementById('gateError');
-  const bioBtn = document.getElementById('gateBiometricBtn');
-  const bioLabel = bioBtn.querySelector('.gate-bio-label');
-  const bioDivider = document.getElementById('gateBiometricDivider');
-  const bioSetup = document.getElementById('gateBiometricSetup');
-  const bioCheckbox = document.getElementById('gateBiometricCheckbox');
-  const bioInfo = document.getElementById('gateBiometricInfo');
-
-  function unlock() {
-    document.documentElement.classList.remove('locked');
-    gate.classList.add('hidden');
-    content.classList.add('revealed');
-  }
-
-  function lock() {
-    document.documentElement.classList.add('locked');
-    gate.classList.remove('hidden');
-    content.classList.remove('revealed');
-  }
-
-  // Always start locked — auth is asked on every page load/reload.
-  lock();
-
-  (async function setupBiometricUI() {
-    const available = await biometricAvailable();
-    if (!available) return; // no fingerprint/Touch ID hardware, or not https
-
-    const hasStoredCred = !!localStorage.getItem(BIOMETRIC_CRED_KEY);
-    if (hasStoredCred) {
-      bioBtn.style.display = 'flex';
-      bioDivider.style.display = 'block';
-      input.removeAttribute('autofocus');
-    } else {
-      bioSetup.style.display = 'flex';
-      bioInfo.style.display = 'block';
-      setTimeout(() => input.focus(), 350);
-    }
-  })();
-
-  // Fallback focus for browsers without biometrics.
-  setTimeout(() => { if (document.activeElement !== input) input.focus(); }, 400);
-
-  bioBtn.addEventListener('click', async () => {
-    bioBtn.disabled = true;
-    bioLabel.textContent = 'Confirming...';
-    const ok = await unlockWithBiometric();
-    bioBtn.disabled = false;
-    bioLabel.textContent = 'Unlock with Touch ID';
-    if (ok) {
-      errorBox.style.display = 'none';
-      unlock();
-    } else {
-      errorBox.textContent = "Couldn't confirm with Touch ID / fingerprint. Please enter your access code below.";
-      errorBox.style.display = 'block';
-      input.focus();
-    }
-  });
-
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const entered = input.value.trim();
-
-    if (entered.toUpperCase() === ACCESS_CODE.toUpperCase()) {
-      errorBox.style.display = 'none';
-
-      if (bioSetup.style.display !== 'none' && bioCheckbox.checked) {
-        await enableBiometricUnlock(); // best-effort; ignored if it fails or is dismissed
-      }
-      unlock();
-    } else {
-      errorBox.textContent = 'Incorrect code. Please try again or contact the caretaker.';
-      errorBox.style.display = 'block';
-      input.value = '';
-      input.focus();
-      const card = document.querySelector('.gate-card');
-      card.style.animation = 'none';
-      card.offsetHeight;
-      card.style.animation = 'cardReveal 0.25s ease both';
-    }
-  });
+/* ---------- access gate (asked on every load) ---------- */
+const ACCESS_CODE="BARAKA2026"; // change this to your own code
+(function(){
+  const $=i=>document.getElementById(i),gate=$('gate'),site=$('site'),inp=$('code'),err=$('gerr'),bb=$('bioBtn');
+  const open=()=>{document.documentElement.classList.remove('locked');gate.classList.add('hidden');site.classList.add('on');startHint();startThanks();observe()};
+  document.documentElement.classList.add('locked');
+  (async()=>{if(!await bioOK())return;
+    if(localStorage.getItem(BK))bb.style.display='block';else $('bioSetup').style.display='flex';})();
+  setTimeout(()=>inp.focus(),400);
+  bb.onclick=async()=>{bb.disabled=true;bb.textContent='Confirming...';const ok=await bioUnlock();bb.disabled=false;bb.textContent='Unlock with Touch ID';
+    if(ok)open();else{err.textContent="Couldn't confirm. Enter your access code instead.";err.style.display='block';inp.focus()}};
+  $('gateForm').addEventListener('submit',async e=>{e.preventDefault();
+    if(inp.value.trim().toUpperCase()===ACCESS_CODE.toUpperCase()){err.style.display='none';
+      if($('bioSetup').style.display==='flex'&&$('bioChk').checked)await bioEnable();open();}
+    else{err.textContent='Wrong code. Try again or ask the caretaker.';err.style.display='block';inp.value='';inp.focus();
+      const c=document.querySelector('.gc');c.style.animation='none';c.offsetHeight;c.style.animation='rise .3s both'}});
 })();
 
-/* ================================================================
-   TENANT DATA
-================================================================ */
+/* ---------- tenants: [house, name, rent] ---------- */
+const TENANTS=[
+["1A","KK",30000],["1B","K K",25150],["1C","KK",11000],["G4","PETER MUIGA",9150],["1D","K,K",30000],["6(G5)","STEPHEN MUTUA",23000],["G1","K.K",12000],["7B","K K",5000],
+["8A","RONNIE ODHIAMBO",7500],["9","MICHAEL SAMORA",9000],["11A","SAMORA MICHAEL",9500],["12","BENARD JASTINE",8500],["13","ANTONIA GRACE",8000],["14A","ESTHER",6500],["15","WINJOY GATWIRI",8000],["17","DIANA NDEGWA",7500],
+["18A","IBRAHIM KARIUKI",6500],["18B","JOHN KIPTONUI T",6500],["19A","MAREMBO NATALIE",6500],["19B","ESTHER WANJIKU",6500],["20A","FAITH",6000],["20B","FAITH",6000],["21","JAMES NDUNGU",6500],["22","CALEB WEKESA",8000],
+["23","HERITIER",7500],["24A","ELVIS KAIGA",6500],["24B","RICHARD OMONDI",6500],["25A","VACANT",6500],["25B","VACANT",6500],["26","JOHN MUTUYA",8000],["27","PAUL OTIENO",6500],["28","LINET",8000],
+["29","RONALD AMITA",6500],["30","MAXI",6500],["31","JOHN",6500],["32","FAITH MWILI",6500],["33","EDNA MOKAYA",8000],["34","STEPHANIE KASINA",8000],["35","RUTH",7000],["36","ALI RAI",6500],
+["37","MIRIAM MUTHONI",6500],["38","WINFRED MUSYOKI",6500],["39","GLAM",6500],["40","ESTHER CHEMAIYO",7000],["41","MELODINA",8000],["42","JULIET NJOGU",8000],["43","NANCY MUSYOKA",6500],["44","DIANAH MUOKI",8000],
+["45","CHRISTINE OCHIENG",6500],["46","VYONNNE OKOTH",6500],["47","PURITY NATASHA",6500],["48","ALEX NGUTA",6500],["49","VIVIVIAN SEEYIAN",9000],["50","PENNINAH",8000],["51","MAVIN",7500],["52","ESTHER MWATHI",6500],
+["53","DUNCAN NYAKUNDI",6500],["54","WILSON NDIRITU",6500],["55","WESLEY OBABI",6500],["56","PURITY",6500],["57","TERENCE ALFAYO",8000],["58","RICHARD",8000],["59","CHRISTOPER MURAGE",7000],["60","ARTHUR",7500],
+["61","Dennis Mungai",6500],["62","STEPHEN MUTUVI",6500],["63","JACOB MUKONAMBI",6500],["64","STAICY ODUOR",6500],["65","DAVID KIRUBI",10000],["66","VINCENT",8000],["67","SHARON KATIR",7000],["68","BLESSED WAMBUI",7000],
+["69","CLAIRE CHEPKEMOI",7000],["70","DUNSTAN",6500],["71","WAYNE MULAMA",6500],["72","ESTHER",6500],["73","ROY MAINA",7500],["74","BRIGTIER AWOUR",6500],["75","MERCY",6500],["76","EPHRAIM",8000],
+["77","FELISTUS WILSON",6500],["78","DUNCAN KIPKEMOI",6500],["79","VAUREY HAWA",6500],["80","GODWIN OBIRIA",7500],["81","SUSAN KINGORI",10000],["82","DUNCAN KIPROP",8000],["83","VACANT",7500],["84","FELIX MACHARIA",7500],
+["85","EVALYNE",6500],["86","VIOLET ALIVIZA",6500],["87","EMMANUEL",6500],["88","FRIDAH MUTINDA",6500],["89","NANCY INGIROSI",6500],["90","DEBORAH CHEPNGENO",8000],["91","DIANA CHERUIYOT",6000],["92","HARRIET JUMASON",8000],
+["93","WINNIE WAMBUI",6000],["94","NICHOLAS NYAMUNYAMU",6000],["95","JULIUS",6500],["96","RYMOD",6500],["97","Linca",6000],["98","STACY NJERI",6000],["99","FRANCIS",6000],["100","BRENDA",6000],
+["101","PURITY MWENDE",6000],["102","SAZLINSZ",6000],["103","MARKRODGERS",6000],["104","CHESIRE SIMON",6000],["105","GORRET",6000],["106","GLORY WACHIE",6000],["107","RITA CHERONO",8000],["108","ANN WANGOMBE",6500]
+].map(([houseNumber,tenantName,rentAmount])=>({houseNumber,tenantName,rentAmount}));
 
-const TENANTS = [
+/* ---------- backend ---------- */
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyOKIi6WxP5cvdc_uG4Wn1EDJWV7JubYou0SBlyATuB5Q4ciYILgwpxqYrzODLAmDbX/exec";
 
-  { houseNumber: "1A", tenantName: "KK", rentAmount: 30000 },
-  { houseNumber: "1B", tenantName: "K K", rentAmount: 25150 },
-  { houseNumber: "1C", tenantName: "KK", rentAmount: 11000 },
-  { houseNumber: "G4", tenantName: "PETER MUIGA", rentAmount: 9150 },
-  { houseNumber: "1D", tenantName: "K,K", rentAmount: 30000 },
-  { houseNumber: "6(G5)", tenantName: "STEPHEN MUTUA", rentAmount: 23000 },
-  { houseNumber: "G1", tenantName: "K.K", rentAmount: 12000 },
-  { houseNumber: "7B", tenantName: "K K", rentAmount: 5000 },
-  { houseNumber: "8A", tenantName: "RONNIE ODHIAMBO", rentAmount: 7500 },
-  { houseNumber: "9", tenantName: "MICHAEL SAMORA", rentAmount: 9000 },
-  { houseNumber: "11A", tenantName: "SAMORA MICHAEL", rentAmount: 9500 },
-  { houseNumber: "12", tenantName: "BENARD JASTINE", rentAmount: 8500 },
-  { houseNumber: "13", tenantName: "ANTONIA GRACE", rentAmount: 8000 },
-  { houseNumber: "14A", tenantName: "ESTHER", rentAmount: 6500 },
-  { houseNumber: "15", tenantName: "WINJOY GATWIRI", rentAmount: 8000 },
-  { houseNumber: "17", tenantName: "DIANA NDEGWA", rentAmount: 7500 },
-  { houseNumber: "18A", tenantName: "IBRAHIM KARIUKI", rentAmount: 6500 },
-  { houseNumber: "18B", tenantName: "JOHN KIPTONUI T", rentAmount: 6500 },
-  { houseNumber: "19A", tenantName: "MAREMBO NATALIE", rentAmount: 6500 },
-  { houseNumber: "19B", tenantName: "ESTHER WANJIKU", rentAmount: 6500 },
-  { houseNumber: "20A", tenantName: "FAITH", rentAmount: 6000 },
-  { houseNumber: "20B", tenantName: "FAITH", rentAmount: 6000 },
-  { houseNumber: "21", tenantName: "JAMES NDUNGU", rentAmount: 6500 },
-  { houseNumber: "22", tenantName: "CALEB WEKESA", rentAmount: 8000 },
-  { houseNumber: "23", tenantName: "HERITIER", rentAmount: 7500 },
-  { houseNumber: "24A", tenantName: "ELVIS KAIGA", rentAmount: 6500 },
-  { houseNumber: "24B", tenantName: "RICHARD OMONDI", rentAmount: 6500 },
-  { houseNumber: "25A", tenantName: "VACANT", rentAmount: 6500 },
-  { houseNumber: "25B", tenantName: "VACANT", rentAmount: 6500 },
-  { houseNumber: "26", tenantName: "JOHN MUTUYA", rentAmount: 8000 },
-  { houseNumber: "27", tenantName: "PAUL OTIENO", rentAmount: 6500 },
-  { houseNumber: "28", tenantName: "LINET ", rentAmount: 8000 },
-  { houseNumber: "29", tenantName: "RONALD AMITA", rentAmount: 6500 },
-  { houseNumber: "30", tenantName: "MAXI", rentAmount: 6500 },
-  { houseNumber: "31", tenantName: "JOHN", rentAmount: 6500 },
-  { houseNumber: "32", tenantName: "FAITH MWILI", rentAmount: 6500 },
-  { houseNumber: "33", tenantName: "EDNA MOKAYA", rentAmount: 8000 },
-  { houseNumber: "34", tenantName: "STEPHANIE KASINA", rentAmount: 8000 },
-  { houseNumber: "35", tenantName: "RUTH", rentAmount: 7000 },
-  { houseNumber: "36", tenantName: "ALI RAI", rentAmount: 6500 },
-  { houseNumber: "37", tenantName: "MIRIAM MUTHONI", rentAmount: 6500 },
-  { houseNumber: "38", tenantName: "WINFRED MUSYOKI", rentAmount: 6500 },
-  { houseNumber: "39", tenantName: "GLAM", rentAmount: 6500 },
-  { houseNumber: "40", tenantName: "ESTHER CHEMAIYO", rentAmount: 7000 },
-  { houseNumber: "41", tenantName: "MELODINA", rentAmount: 8000 },
-  { houseNumber: "42", tenantName: "JULIET NJOGU", rentAmount: 8000 },
-  { houseNumber: "43", tenantName: "NANCY MUSYOKA", rentAmount: 6500 },
-  { houseNumber: "44", tenantName: "DIANAH MUOKI", rentAmount: 8000 },
-  { houseNumber: "45", tenantName: "CHRISTINE OCHIENG", rentAmount: 6500 },
-  { houseNumber: "46", tenantName: "VYONNNE OKOTH", rentAmount: 6500 },
-  { houseNumber: "47", tenantName: "PURITY NATASHA", rentAmount: 6500 },
-  { houseNumber: "48", tenantName: "ALEX NGUTA", rentAmount: 6500 },
-  { houseNumber: "49", tenantName: "VIVIVIAN SEEYIAN", rentAmount: 9000 },
-  { houseNumber: "50", tenantName: "PENNINAH", rentAmount: 8000 },
-  { houseNumber: "51", tenantName: "MAVIN", rentAmount: 7500 },
-  { houseNumber: "52", tenantName: "ESTHER MWATHI", rentAmount: 6500 },
-  { houseNumber: "53", tenantName: "DUNCAN NYAKUNDI", rentAmount: 6500 },
-  { houseNumber: "54", tenantName: "WILSON NDIRITU", rentAmount: 6500 },
-  { houseNumber: "55", tenantName: "WESLEY OBABI", rentAmount: 6500 },
-  { houseNumber: "56", tenantName: "PURITY", rentAmount: 6500 },
-  { houseNumber: "57", tenantName: "TERENCE ALFAYO", rentAmount: 8000 },
-  { houseNumber: "58", tenantName: "RICHARD", rentAmount: 8000 },
-  { houseNumber: "59", tenantName: "CHRISTOPER MURAGE", rentAmount: 7000 },
-  { houseNumber: "60", tenantName: "ARTHUR", rentAmount: 7500 },
-  { houseNumber: "61", tenantName: "Dennis Mungai", rentAmount: 6500 },
-  { houseNumber: "62", tenantName: "STEPHEN MUTUVI", rentAmount: 6500 },
-  { houseNumber: "63", tenantName: "JACOB MUKONAMBI", rentAmount: 6500 },
-  { houseNumber: "64", tenantName: "STAICY ODUOR", rentAmount: 6500 },
-  { houseNumber: "65", tenantName: "DAVID KIRUBI", rentAmount: 10000 },
-  { houseNumber: "66", tenantName: "VINCENT", rentAmount: 8000 },
-  { houseNumber: "67", tenantName: "SHARON KATIR", rentAmount: 7000 },
-  { houseNumber: "68", tenantName: "BLESSED WAMBUI", rentAmount: 7000 },
-  { houseNumber: "69", tenantName: "CLAIRE CHEPKEMOI", rentAmount: 7000 },
-  { houseNumber: "70", tenantName: "DUNSTAN", rentAmount: 6500 },
-  { houseNumber: "71", tenantName: "WAYNE MULAMA", rentAmount: 6500 },
-  { houseNumber: "72", tenantName: "ESTHER", rentAmount: 6500 },
-  { houseNumber: "73", tenantName: "ROY MAINA", rentAmount: 7500 },
-  { houseNumber: "74", tenantName: "BRIGTIER AWOUR", rentAmount: 6500 },
-  { houseNumber: "75", tenantName: "MERCY", rentAmount: 6500 },
-  { houseNumber: "76", tenantName: "EPHRAIM ", rentAmount: 8000 },
-  { houseNumber: "77", tenantName: "FELISTUS WILSON", rentAmount: 6500 },
-  { houseNumber: "78", tenantName: "DUNCAN KIPKEMOI", rentAmount: 6500 },
-  { houseNumber: "79", tenantName: "VAUREY HAWA", rentAmount: 6500 },
-  { houseNumber: "80", tenantName: "GODWIN OBIRIA", rentAmount: 7500 },
-  { houseNumber: "81", tenantName: "SUSAN KINGORI", rentAmount: 10000 },
-  { houseNumber: "82", tenantName: "DUNCAN KIPROP", rentAmount: 8000 },
-  { houseNumber: "83", tenantName: "VACANT", rentAmount: 7500 },
-  { houseNumber: "84", tenantName: "FELIX MACHARIA", rentAmount: 7500 },
-  { houseNumber: "85", tenantName: "EVALYNE", rentAmount: 6500 },
-  { houseNumber: "86", tenantName: "VIOLET ALIVIZA", rentAmount: 6500 },
-  { houseNumber: "87", tenantName: "EMMANUEL ", rentAmount: 6500 },
-  { houseNumber: "88", tenantName: "FRIDAH MUTINDA", rentAmount: 6500 },
-  { houseNumber: "89", tenantName: "NANCY INGIROSI", rentAmount: 6500 },
-  { houseNumber: "90", tenantName: "DEBORAH CHEPNGENO", rentAmount: 8000 },
-  { houseNumber: "91", tenantName: "DIANA CHERUIYOT", rentAmount: 6000 },
-  { houseNumber: "92", tenantName: "HARRIET JUMASON", rentAmount: 8000 },
-  { houseNumber: "93", tenantName: "WINNIE WAMBUI", rentAmount: 6000 },
-  { houseNumber: "94", tenantName: "NICHOLAS NYAMUNYAMU", rentAmount: 6000 },
-  { houseNumber: "95", tenantName: "JULIUS", rentAmount: 6500 },
-  { houseNumber: "96", tenantName: "RYMOD", rentAmount: 6500 },
-  { houseNumber: "97", tenantName: "Linca", rentAmount: 6000 },
-  { houseNumber: "98", tenantName: "STACY NJERI", rentAmount: 6000 },
-  { houseNumber: "99", tenantName: "FRANCIS", rentAmount: 6000 },
-  { houseNumber: "100", tenantName: "BRENDA", rentAmount: 6000 },
-  { houseNumber: "101", tenantName: "PURITY MWENDE", rentAmount: 6000 },
-  { houseNumber: "102", tenantName: "SAZLINSZ", rentAmount: 6000 },
-  { houseNumber: "103", tenantName: "MARKRODGERS", rentAmount: 6000 },
-  { houseNumber: "104", tenantName: "CHESIRE SIMON", rentAmount: 6000 },
-  { houseNumber: "105", tenantName: "GORRET", rentAmount: 6000 },
-  { houseNumber: "106", tenantName: "GLORY WACHIE", rentAmount: 6000 },
-  { houseNumber: "107", tenantName: "RITA CHERONO", rentAmount: 8000 },
-  { houseNumber: "108", tenantName: "ANN WANGOMBE", rentAmount: 6500 },
-];
+/* ---------- helpers ---------- */
+const $=i=>document.getElementById(i);
+const kes=n=>'KES '+Number(n).toLocaleString('en-KE');
+const norm=s=>s.toLowerCase().replace(/\s+/g,'');
+let selected=null,sent=false;
 
-
-
-
-/* Update pills count dynamically */
-document.getElementById('totalUnits').textContent = "108";
-
-/* ================================================================
-   EMAILJS CONFIGURATION
-================================================================ */
-const EMAILJS_PUBLIC_KEY = "kC6jeiFALBTa4IA22";
-const EMAILJS_SERVICE_ID = "service_e6aqg2m";
-const EMAILJS_TEMPLATE_ID = "template_hbe58mp";
-const EMAILJS_AUTOREPLY_TEMPLATE_ID = "template_fnv2ih7";
-/* Init EmailJS */
-
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOKIi6WxP5cvdc_uG4Wn1EDJWV7JubYou0SBlyATuB5Q4ciYILgwpxqYrzODLAmDbX/exec";
-emailjs.init(EMAILJS_PUBLIC_KEY);
-
-/* ================================================================
-   TYPEWRITER STRIP LOGIC
-   Cycles through short helper phrases, one letter at a time.
-   Includes a simplified WhatsApp/caretaker prompt.
-================================================================ */
-const TYPEWRITER_PHRASES = [
-  "Issue with your house? Tap the WhatsApp icon to reach the caretaker.",
-  "Search your house number above to get started.",
-  "Payments are reviewed and confirmed within 24 hours.",
-  "Tap \"How to Pay\" for the Paybill and account number.",
-];
-
-(function typewriterLoop() {
-  const el = document.getElementById('typewriterText');
-  let phraseIndex = 0;
-  let charIndex = 0;
-  let deleting = false;
-
-  function tick() {
-    const phrase = TYPEWRITER_PHRASES[phraseIndex];
-
-    if (!deleting) {
-      charIndex++;
-      el.textContent = phrase.slice(0, charIndex);
-      if (charIndex === phrase.length) {
-        deleting = true;
-        setTimeout(tick, 1800); // pause at full phrase
-        return;
-      }
-      setTimeout(tick, 34);
-    } else {
-      charIndex--;
-      el.textContent = phrase.slice(0, charIndex);
-      if (charIndex === 0) {
-        deleting = false;
-        phraseIndex = (phraseIndex + 1) % TYPEWRITER_PHRASES.length;
-        setTimeout(tick, 300);
-        return;
-      }
-      setTimeout(tick, 16);
-    }
-  }
-  tick();
-})();
-
-/* ================================================================
-   APPRECIATION BANNER LOGIC (NEW)
-   Crossfades through a rotation of short thank-you messages.
-   Distinct from the typewriter above: this fades whole lines
-   in and out, rather than typing letter by letter, so the two
-   animated strips feel different from one another.
-================================================================ */
-const APPRECIATION_MESSAGES = [
-  "Thank you for calling Baraka Plaza home. 🏡",
-  "We appreciate your prompt payments every month — it truly makes a difference.",
-  "Grateful to have tenants like you as part of the Baraka Plaza family.",
-  "Your trust and support keep this community thriving. Thank you!",
-];
-
-(function appreciationLoop() {
-  const el = document.getElementById('appreciationText');
-  let index = 0;
-
-  function showNext() {
-    el.textContent = APPRECIATION_MESSAGES[index];
-    el.classList.remove('fade-out');
-    el.classList.add('fade-in');
-  }
-
-  showNext();
-
-  setInterval(() => {
-    el.classList.remove('fade-in');
-    el.classList.add('fade-out');
-    setTimeout(() => {
-      index = (index + 1) % APPRECIATION_MESSAGES.length;
-      showNext();
-    }, 480); // matches fade-out animation duration
-  }, 4200);
-})();
-
-/* ================================================================
-   SEARCH LOGIC
-================================================================ */
-const searchInput     = document.getElementById('searchInput');
-const resultsDropdown = document.getElementById('resultsDropdown');
-let selectedTenant    = null;
-
-function normalize(str) {
-  return str.toLowerCase().replace(/\s+/g, '');
+/* rotating hint (typed) */
+function startHint(){
+  const P=["Problem with your house? Tap the green chat button.","Search your house number to begin.","Payments are reviewed within 24 hours.","Tap How to pay for the Paybill and account number."];
+  const el=$('hint');let p=0,c=0,del=false;
+  (function t(){const s=P[p];
+    if(!del){el.textContent=s.slice(0,++c);if(c===s.length){del=true;return setTimeout(t,1800)}setTimeout(t,34)}
+    else{el.textContent=s.slice(0,--c);if(!c){del=false;p=(p+1)%P.length;return setTimeout(t,300)}setTimeout(t,16)}})();
+}
+/* rotating thank-you */
+function startThanks(){
+  const M=["Thank you for calling Baraka Plaza home.","We appreciate your prompt payments every month.","Grateful to have you in the Baraka Plaza family.","Your trust keeps this community thriving."];
+  const el=$('thanks');let i=0;el.textContent=M[0];
+  setInterval(()=>{el.classList.add('out');setTimeout(()=>{i=(i+1)%M.length;el.textContent=M[i];el.classList.remove('out')},460)},4500);
+}
+/* one orchestrated entrance: steps appear in sequence as the page opens */
+function observe(){
+  document.querySelectorAll('.step').forEach((s,i)=>{s.style.animation=`rise .6s ${.15+i*.14}s cubic-bezier(.2,.8,.2,1) both`});
 }
 
-function renderDropdown(matches) {
-  resultsDropdown.innerHTML = '';
-  if (!matches.length) {
-    resultsDropdown.innerHTML = '<div class="no-result">No house found. Try another name or number.</div>';
-  } else {
-    matches.forEach(t => {
-      const item = document.createElement('div');
-      item.className = 'result-item';
-      item.setAttribute('role', 'option');
-      item.setAttribute('tabindex', '0');
-      item.innerHTML = `
-        <span class="result-name">${t.tenantName}</span>
-        <span class="result-house">${t.houseNumber}</span>
-      `;
-      item.addEventListener('click', () => selectTenant(t));
-      item.addEventListener('keydown', e => { if (e.key === 'Enter') selectTenant(t); });
-      resultsDropdown.appendChild(item);
-    });
-  }
-  resultsDropdown.classList.add('open');
-}
-
-searchInput.addEventListener('input', () => {
-  const q = normalize(searchInput.value);
-  if (!q || q.length < 1) {
-    resultsDropdown.classList.remove('open');
-    return;
-  }
-  const matches = TENANTS.filter(t =>
-    normalize(t.houseNumber).includes(q) ||
-    normalize(t.tenantName).includes(q)
-  );
-  renderDropdown(matches);
-});
-
-/* Close dropdown when clicking outside */
-document.addEventListener('click', e => {
-  if (!document.getElementById('searchWrap').contains(e.target)) {
-    resultsDropdown.classList.remove('open');
-  }
-});
-
-/* ================================================================
-   TENANT SELECTION
-================================================================ */
-function selectTenant(tenant) {
-  selectedTenant = tenant;
-  resultsDropdown.classList.remove('open');
-  searchInput.value = `${tenant.houseNumber} - ${tenant.tenantName}`;
-
-  document.getElementById('tc-house').textContent = tenant.houseNumber;
-  document.getElementById('tc-name').textContent  = tenant.tenantName;
-  document.getElementById('tc-rent').textContent  = tenant.rentAmount;
-  document.getElementById('tc-due').textContent   = tenant.dueNote;
-
-  document.getElementById('f-house').value = tenant.houseNumber;
-  document.getElementById('f-name').value  = tenant.tenantName;
-  document.getElementById('f-rent').value  = tenant.rentAmount;
-
-  const card = document.getElementById('tenantCard');
-  card.style.display = 'block';
-  card.style.animation = 'none';
-  card.offsetHeight;
-  card.style.animation = 'cardReveal 0.35s ease both';
-
-  if (!hasSubmitted) {
-    document.getElementById('submitBtn').disabled = false;
-  }
-}
-
-document.getElementById('clearBtn').addEventListener('click', () => {
-  selectedTenant = null;
-  searchInput.value = '';
-  document.getElementById('tenantCard').style.display = 'none';
-  document.getElementById('submitBtn').disabled = true;
-  document.getElementById('f-house').value = '';
-  document.getElementById('f-name').value  = '';
-  document.getElementById('f-rent').value  = '';
-  hideStatus();
-});
-
-
-/* ================================================================
-   PAYBILL FLOATING WIDGET LOGIC
-================================================================ */
-const payFabBtn   = document.getElementById('payFabBtn');
-const payOverlay  = document.getElementById('payOverlay');
-const payCloseBtn = document.getElementById('payCloseBtn');
-
-payFabBtn.addEventListener('click', () => payOverlay.classList.add('open'));
-payCloseBtn.addEventListener('click', () => payOverlay.classList.remove('open'));
-payOverlay.addEventListener('click', (e) => {
-  if (e.target === payOverlay) payOverlay.classList.remove('open');
-});
-
-document.querySelectorAll('.pay-copy-btn').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const targetId = btn.getAttribute('data-copy-target');
-    const text = document.getElementById(targetId).textContent.trim();
-    try {
-      await navigator.clipboard.writeText(text);
-      const original = btn.textContent;
-      btn.textContent = 'Copied!';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = original;
-        btn.classList.remove('copied');
-      }, 1500);
-    } catch (err) {
-      console.error('Copy failed', err);
-    }
+/* ---------- search ---------- */
+const q=$('q'),dd=$('dd');
+function render(list){
+  dd.innerHTML='';
+  if(!list.length){dd.innerHTML='<div class="none">No house found. Try another name or number.</div>'}
+  list.slice(0,30).forEach(t=>{
+    const d=document.createElement('div');d.className='opt';d.tabIndex=0;d.setAttribute('role','option');
+    const n=document.createElement('span');n.textContent=t.tenantName;
+    const h=document.createElement('em');h.textContent=t.houseNumber;
+    d.append(n,h);d.onclick=()=>pick(t);d.onkeydown=e=>{if(e.key==='Enter')pick(t)};dd.appendChild(d);
   });
+  dd.classList.add('open');
+}
+q.addEventListener('input',()=>{
+  const v=norm(q.value);if(!v){dd.classList.remove('open');return}
+  render(TENANTS.filter(t=>t.tenantName!=='VACANT'&&(norm(t.houseNumber).includes(v)||norm(t.tenantName).includes(v))));
+});
+document.addEventListener('click',e=>{if(!$('sw').contains(e.target))dd.classList.remove('open')});
+
+function pick(t){
+  selected=t;dd.classList.remove('open');q.value=t.houseNumber+' - '+t.tenantName;
+  $('tHouse').textContent=t.houseNumber;$('tName').textContent=t.tenantName;$('tRent').textContent=kes(t.rentAmount);
+  $('plate').classList.add('show');
+  const tg=$('tHouse');tg.classList.remove('flip');tg.offsetWidth;tg.classList.add('flip');
+  progress();
+}
+$('clr').onclick=()=>{selected=null;q.value='';$('plate').classList.remove('show');hideMsg();progress()};
+
+/* ---------- progress rail ---------- */
+function progress(){
+  const d1=!!selected,d2=$('bank').value.trim().length>8,d3=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('email').value.trim());
+  $('s1').classList.toggle('done',d1);$('s2').classList.toggle('done',d2);$('s3').classList.toggle('done',sent);
+  const n=[d1,d2,d3&&d2&&d1].filter(Boolean).length;
+  $('fill').style.height=(sent?100:Math.min(n,3)/3*85)+'%';
+  $('sendBtn').disabled=!d1||sent;
+}
+['bank','email','notes'].forEach(i=>$(i).addEventListener('input',progress));
+
+/* ---------- pay sheet ---------- */
+$('payBtn').onclick=()=>$('ov').classList.add('open');
+$('payClose').onclick=()=>$('ov').classList.remove('open');
+$('ov').onclick=e=>{if(e.target===$('ov'))$('ov').classList.remove('open')};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('ov').classList.remove('open')});
+document.querySelectorAll('.cp').forEach(b=>b.onclick=async()=>{
+  try{await navigator.clipboard.writeText($(b.dataset.c).textContent.trim());
+    const o=b.textContent;b.textContent='Copied';b.classList.add('ok');setTimeout(()=>{b.textContent=o;b.classList.remove('ok')},1500)}catch(e){}
 });
 
-
-/* ================================================================
-   CONFETTI SURPRISE
-   A small celebratory burst fired on successful submission.
-================================================================ */
-function fireConfetti() {
-  const colors = ['#1a7a52', '#25c97f', '#e8683a', '#0f5c39', '#5fe0a6'];
-  const count = 46;
-
-  for (let i = 0; i < count; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-
-    const size = 6 + Math.random() * 6;
-    const isCircle = Math.random() > 0.5;
-
-    piece.style.left = Math.random() * 100 + 'vw';
-    piece.style.width = size + 'px';
-    piece.style.height = (isCircle ? size : size * 0.5) + 'px';
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.borderRadius = isCircle ? '50%' : '2px';
-
-    const duration = 2.4 + Math.random() * 1.6;
-    const delay = Math.random() * 0.3;
-    piece.style.animationDuration = duration + 's';
-    piece.style.animationDelay = delay + 's';
-
-    document.body.appendChild(piece);
-    setTimeout(() => piece.remove(), (duration + delay) * 1000 + 200);
-  }
+/* ---------- status + confetti ---------- */
+function msg(type,text){const m=$('msg');m.className=type;m.textContent=text;m.style.display='block';m.scrollIntoView({behavior:'smooth',block:'nearest'})}
+function hideMsg(){const m=$('msg');m.style.display='none';m.className=''}
+function confetti(){
+  const C=['#2b63f0','#f6d98a','#c9922e','#14a06b','#ffffff','#6f98ff'];
+  for(let i=0;i<50;i++){const p=document.createElement('div');p.className='cf';const s=6+Math.random()*7,round=Math.random()>.5,d=2.4+Math.random()*1.6,dl=Math.random()*.3;
+    Object.assign(p.style,{left:Math.random()*100+'vw',width:s+'px',height:(round?s:s*.5)+'px',background:C[i%C.length],borderRadius:round?'50%':'2px',animationDuration:d+'s',animationDelay:dl+'s'});
+    document.body.appendChild(p);setTimeout(()=>p.remove(),(d+dl)*1000+200)}
 }
+/* button ripple */
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('.send');if(!b||b.disabled)return;
+  const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height)*2,x=document.createElement('span');x.className='rp';
+  Object.assign(x.style,{width:s+'px',height:s+'px',left:e.clientX-r.left-s/2+'px',top:e.clientY-r.top-s/2+'px'});b.appendChild(x);setTimeout(()=>x.remove(),650)});
 
-/* ================================================================
-   STATUS HELPERS
-================================================================ */
-function showStatus(type, msg) {
-  const el = document.getElementById('statusMsg');
-  el.className = type;
-  el.textContent = msg;
-  el.style.display = 'block';
-  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-function hideStatus() {
-  const el = document.getElementById('statusMsg');
-  el.style.display = 'none';
-  el.className = '';
-}
+/* ---------- submit ---------- */
+$('form').addEventListener('submit',async e=>{
+  e.preventDefault();hideMsg();
+  if(sent)return msg('error','You already sent a payment proof this session. Contact the caretaker if you need to send another.');
+  if(!selected)return msg('error','Search for your house and select it first.');
+  const bank=$('bank').value.trim();
+  if(!bank){msg('error','Paste your payment message first.');return $('bank').focus()}
+  const email=$('email').value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg('error','Enter a valid email address.');return $('email').focus()}
 
-/* ================================================================
-   FORM SUBMISSION
-================================================================ */
-let hasSubmitted = false;
-
-document.getElementById('paymentForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  hideStatus();
-
-  if (hasSubmitted) {
-    showStatus('error', 'You have already submitted a payment proof this session. Please contact the caretaker if you need to make another submission.');
-    return;
-  }
-
-  if (!selectedTenant) {
-    showStatus('error', 'Please search and select your house number first.');
-    return;
-  }
-
-  const bankMsg = document.getElementById('f-bankMsg').value.trim();
-  if (!bankMsg) {
-    showStatus('error', 'Please paste your bank payment message.');
-    document.getElementById('f-bankMsg').focus();
-    return;
-  }
-
-  const email = document.getElementById('f-email').value.trim();
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    showStatus('error', 'Please enter a valid email address.');
-    document.getElementById('f-email').focus();
-    return;
-  }
-
-  const btn = document.getElementById('submitBtn');
-  btn.classList.add('loading');
-  btn.disabled = true;
-
-  const params = {
-    house_number:       selectedTenant.houseNumber,
-    tenant_name:         selectedTenant.tenantName,
-    rent_amount:         selectedTenant.rentAmount,
-    bank_message:        bankMsg,
-    notes:                document.getElementById('f-notes').value.trim() || 'None',
-    tenant_email:         email,
-    submitted_at:         new Date().toLocaleString('en-KE', { timeZone: 'Africa/Nairobi' }),
-  };
-
-  try {
-    const formData = new URLSearchParams();
-    Object.keys(params).forEach(key => {
-      formData.append(key, params[key]);
-    });
-
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to save payment.");
-    }
-
-    showStatus(
-      'success',
-      'Payment proof submitted successfully! The caretaker has been notified and a confirmation email has been sent.'
-    );
-    fireConfetti();
-
-    hasSubmitted = true;
-    btn.classList.remove('loading');
-    btn.classList.add('submitted');
-    btn.querySelector('.btn-text').textContent = 'Submitted ✓';
-    btn.disabled = true;
-
-  } catch (err) {
-    console.error(err);
-    showStatus(
-      'error',
-      'Submission failed. ' + (err.message || 'Unknown error')
-    );
-    btn.classList.remove('loading');
-    btn.disabled = false;
+  const btn=$('sendBtn');btn.classList.add('loading');btn.disabled=true;
+  const params={house_number:selected.houseNumber,tenant_name:selected.tenantName,rent_amount:selected.rentAmount,bank_message:bank,
+    notes:$('notes').value.trim()||'None',tenant_email:email,submitted_at:new Date().toLocaleString('en-KE',{timeZone:'Africa/Nairobi'})};
+  try{
+    const body=new URLSearchParams();Object.keys(params).forEach(k=>body.append(k,params[k]));
+    const res=await fetch(SCRIPT_URL,{method:'POST',body});
+    if(!res.ok)throw new Error('The payment could not be saved.');
+    msg('success','Proof sent. The caretaker has been notified and a confirmation email is on its way.');
+    confetti();sent=true;btn.classList.remove('loading');btn.classList.add('sent');btn.querySelector('.tx').textContent='Sent';btn.disabled=true;progress();
+  }catch(err){
+    console.error(err);msg('error','Sending failed: '+(err.message||'unknown error')+' Check your connection and try again.');
+    btn.classList.remove('loading');btn.disabled=false;
   }
 });
 </script>
