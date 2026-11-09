@@ -354,8 +354,9 @@ const TENANTS=[
 ["69","CLAIRE CHEPKEMOI",7000],["70","DUNSTAN",6500],["71","WAYNE MULAMA",6500],["72","ESTHER",6500],["73","ROY MAINA",7500],["74","BRIGTIER AWOUR",6500],["75","MERCY",6500],["76","EPHRAIM",8000],
 ["77","FELISTUS WILSON",6500],["78","DUNCAN KIPKEMOI",6500],["79","VAUREY HAWA",6500],["80","GODWIN OBIRIA",7500],["81","SUSAN KINGORI",10000],["82","DUNCAN KIPROP",8000],["83","VACANT",7500],["84","FELIX MACHARIA",7500],
 ["85","EVALYNE",6500],["86","VIOLET ALIVIZA",6500],["87","EMMANUEL",6500],["88","FRIDAH MUTINDA",6500],["89","NANCY INGIROSI",6500],["90","DEBORAH CHEPNGENO",8000],["91","DIANA CHERUIYOT",6000],["92","HARRIET JUMASON",8000],
-["93","WINNIE WAMBUI",6000],["94","NICHOLAS NYAMUNYAMU",6000],["95","JULIUS",6500],["96","RYMOD",6500],["97","Linca",6000],["98","STACY NJERI",6000],["99","FRANCIS",6000],["100","BRENDA",6000],
-["101","PURITY MWENDE",6000],["102","SAZLINSZ",6000],["103","MARKRODGERS",6000],["104","CHESIRE SIMON",6000],["105","GORRET",6000],["106","GLORY WACHIE",6000],["107","RITA CHERONO",8000],["108","ANN WANGOMBE",6500]
+["93","TERRY",6000],["94","NICHOLAS NYAMUNYAMU",6000],["95","JULIUS",6500],["96","RYMOD",6500],["97","Linca",6000],["98","STACY NJERI",6000],["99","FRANCIS",6000],["100","BRENDA",6000],
+["101","PURITY MWENDE",6000],["102","SAZLINSZ",6000],["103","MARKRODGERS",6000],["104","CHESIRE SIMON",6000],["105","GORRET",6000],["106","GLORY WACHIE",6000],["107","RITA CHERONO",8000],["108","ANN WANGOMBE",6500],
+["","NASH SPORTS",15000]
 ].map(([houseNumber,tenantName,rentAmount])=>({houseNumber,tenantName,rentAmount}));
 
 /* ---------- backend ---------- */
@@ -403,8 +404,9 @@ function render(list){
   list.slice(0,30).forEach((t,i)=>{
     const d=document.createElement('div');d.className='opt';d.style.animationDelay=i*.03+'s';d.tabIndex=0;d.setAttribute('role','option');
     const n=document.createElement('span');n.textContent=t.tenantName;
-    const h=document.createElement('em');h.textContent=t.houseNumber;
-    d.append(n,h);d.onclick=()=>pick(t);d.onkeydown=e=>{if(e.key==='Enter')pick(t)};dd.appendChild(d);
+    d.append(n);
+    if(t.houseNumber){const h=document.createElement('em');h.textContent=t.houseNumber;d.append(h);}
+    d.onclick=()=>pick(t);d.onkeydown=e=>{if(e.key==='Enter')pick(t)};dd.appendChild(d);
   });
   dd.classList.add('open');
 }
@@ -415,8 +417,8 @@ q.addEventListener('input',()=>{
 document.addEventListener('click',e=>{if(!$('sw').contains(e.target))dd.classList.remove('open')});
 
 function pick(t){
-  selected=t;dd.classList.remove('open');q.value=t.houseNumber+' - '+t.tenantName;
-  $('tHouse').textContent=t.houseNumber;$('tName').textContent=t.tenantName;countUp($('tRent'),t.rentAmount);
+  selected=t;dd.classList.remove('open');q.value=t.houseNumber?t.houseNumber+' - '+t.tenantName:t.tenantName;
+  $('tHouse').textContent=t.houseNumber||'SHOP';$('tName').textContent=t.tenantName;countUp($('tRent'),t.rentAmount);
   $('plate').classList.add('show');
   const tg=$('tHouse');tg.classList.remove('flip');tg.offsetWidth;tg.classList.add('flip');
   progress();
@@ -469,7 +471,7 @@ $('form').addEventListener('submit',async e=>{
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg('error','Enter a valid email address.');return $('email').focus()}
 
   const btn=$('sendBtn');btn.classList.add('loading');btn.disabled=true;
-  const params={house_number:selected.houseNumber,tenant_name:selected.tenantName,rent_amount:selected.rentAmount,bank_message:bank,
+  const params={house_number:selected.houseNumber||'SHOP',tenant_name:selected.tenantName,rent_amount:selected.rentAmount,bank_message:bank,
     notes:'Rent for '+month+' '+$('year').value+($('extra').value.trim()?' | Note: '+$('extra').value.trim():''),extra_note:$('extra').value.trim()||'None',month:month,year:$('year').value,tenant_email:email,submitted_at:new Date().toLocaleString('en-KE',{timeZone:'Africa/Nairobi'})};
   try{
     const body=new URLSearchParams();Object.keys(params).forEach(k=>body.append(k,params[k]));
